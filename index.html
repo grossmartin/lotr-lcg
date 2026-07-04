@@ -1,0 +1,1507 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Lord of the Rings — The Card Game · Decklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Spectral:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ------------------------------------------------------------------ *
+ *  THEME TOKENS
+ *  Palette: midnight ink, aged gold, parchment. Sphere colours per FFG.
+ * ------------------------------------------------------------------ */
+:root{
+  --ink:#0c0e13;            /* deepest background */
+  --ink-2:#141822;          /* panel */
+  --ink-3:#1c2230;          /* raised panel */
+  --line:#2c3342;           /* hairline */
+  --gold:#c9a24a;           /* aged gold */
+  --gold-bright:#e4c579;    /* highlight gold */
+  --parch:#e9e1cf;          /* body text */
+  --parch-dim:#a9a08c;      /* muted text */
+  --ember:#c65a3a;          /* warning / danger accent */
+  --ok:#5f9b6b;             /* buildable / success */
+
+  --leadership:#8556c9;
+  --tactics:#c0392b;
+  --spirit:#3a76c4;
+  --lore:#4a8f52;
+  --neutral:#9aa0ab;
+  --baggins:#d0a53a;
+  --fellowship:#e6e6e6;
+
+  --shadow:0 10px 30px rgba(0,0,0,.45);
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:
+    radial-gradient(1200px 700px at 50% -220px, rgba(201,162,74,.10), transparent 60%),
+    linear-gradient(180deg,#0a0c11,#0c0e13 40%,#0a0c11);
+  color:var(--parch);
+  font-family:"EB Garamond","Spectral",Georgia,serif;
+  font-size:17px; line-height:1.55;
+  min-height:100vh;
+}
+a{color:var(--gold-bright);text-decoration:none}
+a:hover{text-decoration:underline}
+img{display:block}
+
+/* ---------- Masthead (the signature element) ---------- */
+.mast{
+  position:relative; text-align:center; cursor:pointer;
+  padding:34px 20px 24px; border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg, rgba(201,162,74,.06), transparent);
+}
+.mast:hover h1{color:#f0d999}
+.mast:focus-visible{outline:2px solid var(--gold);outline-offset:-4px}
+.mast .ring{
+  width:52px;height:52px;margin:0 auto 12px;border-radius:50%;
+  border:2px solid var(--gold); position:relative;
+  box-shadow:0 0 26px rgba(201,162,74,.35), inset 0 0 12px rgba(201,162,74,.25);
+}
+.mast .ring::after{content:"";position:absolute;inset:7px;border-radius:50%;border:1px solid rgba(201,162,74,.5)}
+.mast h1{
+  font-family:"Cinzel",serif; font-weight:600; letter-spacing:.14em;
+  margin:0; font-size:clamp(20px,3.4vw,34px);
+  color:var(--gold-bright); text-shadow:0 1px 0 #000, 0 0 22px rgba(201,162,74,.25);
+}
+.mast .sub{
+  font-family:"Cinzel",serif; letter-spacing:.42em; text-transform:uppercase;
+  font-size:11px; color:var(--parch-dim); margin-top:8px;
+}
+.mast .rule{width:min(560px,80%);height:1px;margin:16px auto 0;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+
+/* ---------- Layout ---------- */
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px 80px}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:center;margin:22px 0 6px}
+.status{font-size:13px;color:var(--parch-dim);text-align:center;min-height:20px;margin-bottom:8px}
+.status.err{color:var(--ember)}
+
+.btn{
+  font-family:"Cinzel",serif;font-size:12px;letter-spacing:.08em;
+  background:var(--ink-3);color:var(--parch);border:1px solid var(--line);
+  padding:9px 14px;border-radius:8px;cursor:pointer;transition:.15s}
+.btn:hover{border-color:var(--gold);color:var(--gold-bright)}
+.btn.gold{background:linear-gradient(180deg,var(--gold-bright),var(--gold));color:#241a06;border-color:var(--gold);font-weight:700}
+.btn.gold:hover{filter:brightness(1.08);color:#241a06}
+.btn.big{font-size:14px;padding:13px 24px;letter-spacing:.12em;text-transform:uppercase;border-radius:10px;box-shadow:0 4px 16px rgba(201,162,74,.25)}
+.btn.ghost{background:transparent;border-color:var(--gold);color:var(--gold-bright)}
+.btn.ghost:hover{background:rgba(201,162,74,.10);color:var(--gold-bright)}
+
+/* ---------- Round phases timeline ---------- */
+.phases-intro{max-width:820px;margin:6px auto 18px;color:var(--parch-dim);font-size:15px;text-align:center}
+.timeline{max-width:840px;margin:0 auto;position:relative}
+.timeline::before{content:"";position:absolute;left:26px;top:10px;bottom:10px;width:2px;
+  background:linear-gradient(180deg,transparent,var(--line),transparent)}
+.phase{position:relative;margin:14px 0;padding-left:60px}
+.phase .num{position:absolute;left:6px;top:2px;width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;z-index:2;
+  font-family:"Cinzel",serif;font-weight:700;font-size:17px;color:#12151d;
+  background:var(--pc,var(--gold));border:2px solid var(--ink);
+  box-shadow:0 0 0 3px rgba(0,0,0,.35), 0 4px 10px rgba(0,0,0,.4)}
+.phase .pcard{border:1px solid var(--line);border-left:4px solid var(--pc,var(--gold));
+  border-radius:12px;background:linear-gradient(180deg,var(--ink-2),var(--ink));padding:12px 16px 14px}
+.phase .ptitle{font-family:"Cinzel",serif;font-weight:700;font-size:18px;color:#f5f1e6;line-height:1.2}
+.phase .pen{font-family:"Cinzel",serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--pc,var(--gold));margin-top:2px}
+.phase ul{margin:10px 0 0;padding:0;list-style:none}
+.phase li{position:relative;padding:4px 0 4px 18px;font-size:15.5px;line-height:1.5;color:var(--parch)}
+.phase li::before{content:"›";position:absolute;left:0;color:var(--pc,var(--gold));font-weight:700}
+.phase li.note{color:var(--parch-dim);font-style:italic;font-size:14px}
+.phase li.note::before{content:"·"}
+.subseq{margin-top:10px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.015)}
+.subseq>summary{cursor:pointer;padding:9px 12px;font-family:"Cinzel",serif;font-size:13px;letter-spacing:.04em;color:var(--gold-bright);list-style:none}
+.subseq>summary::-webkit-details-marker{display:none}
+.subseq>summary::before{content:"▸ ";color:var(--gold)}
+.subseq[open]>summary::before{content:"▾ "}
+.subseq ol{margin:0;padding:4px 16px 12px 34px}
+.subseq li{padding:3px 0;font-size:14.5px;color:var(--parch)}
+.keywords{max-width:840px;margin:26px auto 0}
+.keywords h3{font-family:"Cinzel",serif;color:var(--gold-bright);font-size:16px;letter-spacing:.06em;border-bottom:1px solid var(--line);padding-bottom:6px}
+.kw{border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:8px 0;background:linear-gradient(180deg,var(--ink-2),var(--ink))}
+.kw b{color:var(--gold-bright);font-family:"Cinzel",serif;font-size:14px}
+.kw span{color:var(--parch);font-size:15px}
+
+/* ---------- Deckbuilding guide ---------- */
+.guide{max-width:860px;margin:0 auto}
+.guide-intro{color:var(--parch-dim);font-size:15px;text-align:center;margin:4px auto 18px;max-width:760px}
+.gsec{border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden;
+  background:linear-gradient(180deg,var(--ink-2),var(--ink))}
+.gsec>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;
+  padding:14px 16px;font-family:"Cinzel",serif;font-weight:700;font-size:17px;color:#f5f1e6}
+.gsec>summary::-webkit-details-marker{display:none}
+.gsec>summary .gnum{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--gold);
+  color:#12151d;font-size:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 8px rgba(0,0,0,.4)}
+.gsec>summary::after{content:"▸";margin-left:auto;color:var(--gold);font-size:14px}
+.gsec[open]>summary::after{content:"▾"}
+.gsec[open]>summary{border-bottom:1px solid var(--line)}
+.gbody{padding:12px 18px 18px}
+.gbody h4{font-family:"Cinzel",serif;color:var(--gold-bright);font-size:14px;letter-spacing:.04em;margin:16px 0 6px}
+.gbody h4:first-child{margin-top:2px}
+.gbody p{font-size:15.5px;line-height:1.65;color:var(--parch);margin:0 0 10px}
+.gbody ul{margin:0 0 10px;padding-left:20px}
+.gbody li{font-size:15.5px;line-height:1.6;color:var(--parch);margin:4px 0}
+.gbody b{color:#f0e6cf}
+.gbody .lead{color:var(--gold-bright);font-family:"Cinzel",serif}
+.steps{list-style:none;padding:0;margin:0 0 8px;counter-reset:st}
+.steps>li{position:relative;padding:8px 0 8px 40px;border-bottom:1px dashed var(--line)}
+.steps>li:last-child{border-bottom:none}
+.steps>li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:8px;
+  width:26px;height:26px;border-radius:50%;background:var(--ink-3);border:1px solid var(--gold);
+  color:var(--gold-bright);font-family:"Cinzel",serif;font-size:13px;display:flex;align-items:center;justify-content:center}
+.cheat{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0}
+.cheat .c{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:rgba(255,255,255,.015)}
+.cheat .c b{color:var(--gold-bright);font-family:"Cinzel",serif;font-size:13.5px;display:block;margin-bottom:3px}
+.cheat .c span{font-size:14px;color:var(--parch);line-height:1.45}
+.tech{border:1px solid var(--line);border-left:3px solid var(--lore);border-radius:8px;padding:9px 13px;margin:7px 0;
+  background:rgba(255,255,255,.012)}
+.tech b{color:var(--gold-bright);font-family:"Cinzel",serif;font-size:13.5px}
+.tech .cards{color:var(--parch);font-size:14.5px}
+.tech .cards i{color:var(--parch-dim);font-style:normal;font-size:13px}
+
+/* per-scenario tip box */
+.tipbox{border:1px solid var(--line);border-left:3px solid var(--spirit);border-radius:8px;
+  background:rgba(58,118,196,.07);padding:11px 15px;margin:4px 0 18px;font-size:15px;line-height:1.55;color:var(--parch)}
+.tipbox b{color:#8fb4e6;font-family:"Cinzel",serif;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+
+/* ---------- Card analysis ---------- */
+.acyc{margin-top:22px}
+.acyc>h3{font-family:"Cinzel",serif;color:var(--gold-bright);font-size:18px;letter-spacing:.05em;border-bottom:1px solid var(--line);padding-bottom:6px}
+.aset{border:1px solid var(--line);border-radius:10px;margin:10px 0;overflow:hidden;background:linear-gradient(180deg,var(--ink-2),var(--ink))}
+.aset>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;padding:12px 14px;font-family:"Cinzel",serif;font-weight:700;font-size:15px;color:#f5f1e6}
+.aset>summary::-webkit-details-marker{display:none}
+.aset>summary::before{content:"▸";color:var(--gold)}
+.aset[open]>summary::before{content:"▾"}
+.aset>summary .cnt{margin-left:auto;font-family:"EB Garamond",serif;font-style:italic;color:var(--parch-dim);font-size:13px}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:12px;padding:6px 14px 16px}
+.acard{cursor:pointer;position:relative;transition:transform .12s}
+.acard:hover{transform:translateY(-3px)}
+.acard .imgwrap{border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--ink-3);aspect-ratio:.717}
+.acard img{width:100%;height:100%;object-fit:cover}
+.acard.note::after{content:"★";position:absolute;top:4px;right:6px;color:var(--gold-bright);font-size:14px;text-shadow:0 1px 4px #000}
+
+.modal{position:fixed;inset:0;background:rgba(4,5,8,.84);z-index:100;display:none;align-items:center;justify-content:center;padding:18px}
+.modal.open{display:flex}
+.modal-inner{background:linear-gradient(180deg,var(--ink-2),var(--ink));border:1px solid var(--gold);border-radius:14px;
+  max-width:720px;width:100%;max-height:92vh;overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.65)}
+.modal-x{position:absolute;top:10px;right:10px;background:var(--ink-3);border:1px solid var(--line);color:var(--parch);
+  width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;z-index:2}
+.modal-x:hover{border-color:var(--gold);color:var(--gold-bright)}
+.modal-grid{display:grid;grid-template-columns:220px 1fr;gap:20px;padding:22px}
+.modal-img{width:100%;border-radius:10px;border:1px solid var(--line)}
+.modal-info h3{font-family:"Cinzel",serif;color:var(--gold-bright);font-size:22px;margin:0 0 4px;line-height:1.2}
+.czname{color:#8fb4e6;font-size:15px;font-style:italic;margin:0 0 10px}
+.mstats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.mtraits{color:var(--parch-dim);font-style:italic;font-size:14px;margin-bottom:12px}
+.manalysis{border-top:1px solid var(--line);padding-top:12px}
+.manalysis h4{font-family:"Cinzel",serif;color:var(--gold-bright);font-size:13px;letter-spacing:.08em;margin:0 0 6px}
+.manalysis p{font-size:15px;line-height:1.62;color:var(--parch);margin:0 0 10px}
+.manalysis p.none{color:var(--parch-dim);font-style:italic}
+
+@media (max-width:640px){
+  .modal-grid{grid-template-columns:1fr}
+  .modal-img{max-width:190px;margin:0 auto}
+  .agrid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px}
+}
+@media (max-width:640px){
+  .timeline::before{left:20px}
+  .phase{padding-left:50px}
+  .phase .num{width:36px;height:36px;font-size:15px;left:2px}
+  .phase .ptitle{font-size:16px}
+  .phase li{font-size:15px}
+}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--parch-dim);cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--gold)}
+
+.crumbs{font-size:13px;color:var(--parch-dim);margin:18px 0 6px;letter-spacing:.03em}
+.crumbs a{color:var(--parch-dim)}
+.crumbs a:hover{color:var(--gold-bright)}
+
+/* ---------- Section headers ---------- */
+.section{margin-top:40px}
+.section > .head{display:flex;align-items:baseline;gap:14px;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:20px}
+.section > .head h2{font-family:"Cinzel",serif;font-weight:700;letter-spacing:.03em;color:var(--gold-bright);font-size:24px;margin:0;line-height:1.2}
+.section > .head .meta{font-size:13px;color:var(--parch-dim)}
+.section > .head.scenario h2{color:#f5f1e6}
+
+/* ---------- Scenario / theme tiles ---------- */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.tile{
+  background:linear-gradient(180deg,var(--ink-2),var(--ink));
+  border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 14px;
+  cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+.tile:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:var(--shadow)}
+.tile .en{font-family:"Cinzel",serif;font-weight:700;font-size:19px;line-height:1.25;letter-spacing:.005em;color:#f5f1e6}
+.tile .cz{font-style:italic;color:var(--parch-dim);font-size:15.5px;margin-top:4px}
+.tile .cnt{margin-top:12px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.tile .note{margin-top:8px;font-size:12.5px;color:var(--parch-dim);font-style:italic}
+.tile.theme .en{color:#f5f1e6}
+
+/* ---------- Deck cards ---------- */
+.decks{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.deck{
+  background:linear-gradient(180deg,var(--ink-2),var(--ink));
+  border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;
+  cursor:pointer;transition:.15s;display:flex;flex-direction:column}
+.deck:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:var(--shadow)}
+.deck .heroes{display:flex;gap:6px;padding:12px 12px 0}
+.hero-port{
+  width:60px;height:78px;border-radius:7px;overflow:hidden;flex:0 0 auto;
+  border:2px solid var(--sphere,var(--neutral));background:var(--ink-3);
+  box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.hero-port img{width:100%;height:135%;object-fit:cover;object-position:center 8%}
+.deck .body{padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.deck .name{font-family:"Cinzel",serif;font-weight:600;font-size:18px;color:var(--parch);line-height:1.35}
+.deck .by{font-size:13px;color:var(--parch-dim);font-style:italic;margin-top:-4px}
+.deck .stats{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:auto}
+.pill{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--parch-dim);white-space:nowrap}
+.pill.threat{border-color:rgba(201,162,74,.5);color:var(--gold-bright)}
+.pill.threat b{font-family:"Cinzel",serif}
+.pill.ok{border-color:rgba(95,155,107,.55);color:#9ccaa3}
+.pill.warn{border-color:rgba(198,90,58,.55);color:#e6a088}
+.spheres{display:flex;gap:4px}
+.sdot{width:11px;height:11px;border-radius:50%;background:var(--c);box-shadow:0 0 0 1px rgba(0,0,0,.3)}
+.deck .loading,.deck .derr{padding:14px;color:var(--parch-dim);font-style:italic;font-size:14px}
+.deck .derr{color:var(--ember)}
+
+/* ---------- Deck detail ---------- */
+.detail-head{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;margin-top:14px}
+.detail-head .heroes{display:flex;gap:10px}
+.detail-head .hero-port{width:86px;height:112px}
+.detail-title h2{font-family:"Cinzel",serif;font-weight:700;color:var(--gold-bright);margin:0 0 4px;font-size:30px;letter-spacing:.02em;line-height:1.2}
+.detail-title .by{color:var(--parch-dim);font-style:italic}
+.detail-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.big-threat{font-family:"Cinzel",serif;font-size:15px}
+.desc{
+  margin:26px 0;padding:18px 20px;border:1px solid var(--line);border-left:3px solid var(--gold);
+  border-radius:8px;background:rgba(255,255,255,.015);color:var(--parch);
+  font-size:16px;line-height:1.7;max-width:820px}
+.desc h3{font-family:"Cinzel",serif;color:var(--gold-bright);font-size:14px;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px}
+.desc p{margin:0 0 12px}
+.desc a{color:var(--gold-bright)}
+.desc-lang{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:14px}
+.desc-lang a{color:var(--gold-bright);font-family:"Cinzel",serif;letter-spacing:.04em;font-size:13px}
+.desc-lang .tr-note{color:var(--parch-dim);font-style:italic;margin-right:8px}
+
+.cardgroup{margin-top:30px}
+.cardgroup h3{font-family:"Cinzel",serif;color:var(--gold-bright);font-size:15px;letter-spacing:.08em;
+  border-bottom:1px solid var(--line);padding-bottom:6px;margin:0 0 16px;display:flex;justify-content:space-between}
+.cardgroup h3 .g-cnt{color:var(--parch-dim);font-family:"EB Garamond",serif;font-style:italic;font-size:14px}
+.cardgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
+.card{position:relative}
+.card .imgwrap{position:relative;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:var(--ink-3);aspect-ratio:.717}
+.card .imgwrap img{width:100%;height:100%;object-fit:cover}
+.card.notowned .imgwrap{outline:2px solid var(--ember);outline-offset:-2px}
+.card .qty{                       /* sits OUTSIDE the rounded image so it's never clipped */
+  position:absolute;top:-11px;left:-11px;z-index:4;
+  min-width:40px;height:36px;padding:0 9px;border-radius:11px;
+  background:#12151d;color:var(--gold-bright);border:2px solid var(--gold);
+  font-family:"Cinzel",serif;font-weight:700;font-size:18px;letter-spacing:.02em;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 5px 14px rgba(0,0,0,.6)}
+.card .cname{font-size:15px;color:var(--parch);margin-top:8px;text-align:center;line-height:1.3}
+.card .cname .cn-qty{color:var(--gold-bright);font-family:"Cinzel",serif;font-weight:700}
+.card .flag{position:absolute;bottom:6px;left:6px;right:6px;background:rgba(198,90,58,.92);color:#fff;
+  font-size:11px;text-align:center;padding:3px 4px;border-radius:5px}
+
+.empty{border:1px dashed var(--line);border-radius:var(--radius);padding:30px;text-align:center;color:var(--parch-dim)}
+.empty b{color:var(--parch);font-family:"Cinzel",serif;display:block;margin-bottom:8px;letter-spacing:.05em}
+
+/* ---------- Add-deck box ---------- */
+.addbox{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:6px 0 24px;
+  padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.015)}
+.addbox label{font-size:13px;color:var(--parch-dim)}
+.addbox input{flex:1;min-width:220px;background:var(--ink);border:1px solid var(--line);color:var(--parch);
+  padding:9px 12px;border-radius:8px;font-family:inherit;font-size:15px}
+.addbox input:focus{outline:none;border-color:var(--gold)}
+
+/* legend */
+.legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:12.5px;color:var(--parch-dim);margin-top:10px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+
+footer{text-align:center;color:var(--parch-dim);font-size:12.5px;padding:30px 20px;border-top:1px solid var(--line);margin-top:40px}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--gold);border-radius:50%;animation:sp 1s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+.remove{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.55);border:1px solid var(--line);
+  color:var(--parch-dim);border-radius:6px;font-size:11px;padding:2px 7px;cursor:pointer;z-index:2}
+.remove:hover{color:var(--ember);border-color:var(--ember)}
+.deck{position:relative}
+.deck .star{position:absolute;top:8px;right:11px;z-index:3;color:var(--gold-bright);font-size:19px;line-height:1;
+  text-shadow:0 1px 4px rgba(0,0,0,.7);pointer-events:none}
+.detail-title h2 .star{color:var(--gold-bright);font-size:22px;margin-left:8px;text-shadow:0 1px 4px rgba(0,0,0,.7)}
+.starnote{font-size:12.5px;color:var(--parch-dim);margin:2px 0 16px}
+.starnote .s{color:var(--gold-bright)}
+
+/* ---------- Mobile ---------- */
+@media (max-width:640px){
+  body{font-size:16px}
+  .wrap{padding:0 12px 60px}
+  .mast{padding:24px 14px 18px}
+  .mast .sub{letter-spacing:.30em}
+  .toolbar{gap:10px}
+  .btn.big{width:100%}
+  .toggle{width:100%;justify-content:center}
+  .grid{grid-template-columns:1fr 1fr;gap:10px}
+  .tile{padding:13px 13px 12px}
+  .tile .en{font-size:16px}
+  .tile .cz{font-size:13.5px}
+  .decks{grid-template-columns:1fr;gap:12px}
+  .deck .hero-port{width:56px;height:73px}
+  .deck .name{font-size:17px}
+  .cardgrid{grid-template-columns:1fr 1fr;gap:16px}
+  .detail-head{gap:14px}
+  .detail-head .hero-port{width:70px;height:92px}
+  .detail-title h2{font-size:24px}
+  .cardgroup h3{font-size:14px}
+  .desc{font-size:16px;padding:15px 16px}
+  .addbox{flex-direction:column;align-items:stretch}
+  .addbox input,.addbox .btn{width:100%;text-align:center}
+  .card .qty{min-width:36px;height:33px;font-size:16px;top:-9px;left:-9px}
+  .cheat{grid-template-columns:1fr}
+}
+@media (max-width:380px){ .grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<header class="mast" onclick="go('home')" role="link" tabindex="0" title="Späť na hlavnú stránku"
+  onkeydown="if(event.key==='Enter'||event.key===' ')go('home')">
+  <div class="ring"></div>
+  <h1>The Lord of the Rings</h1>
+  <div class="sub">The Card Game · Decklist</div>
+  <div class="rule"></div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <button class="btn gold big" id="reload">Nahrať databázu kariet</button>
+    <button class="btn big ghost" onclick="go('phases')">⏱ Fázy kola</button>
+    <button class="btn big ghost" onclick="go('guide')">🛠 Ako stavať decky</button>
+    <button class="btn big ghost" onclick="go('analysis')">🔍 Analýza kariet</button>
+    <label class="toggle"><input type="checkbox" id="onlyOwned" checked> Skryť decky s kartami mimo mojej zbierky</label>
+  </div>
+  <div class="status" id="status"></div>
+  <div class="legend" id="legend"></div>
+
+  <main id="view"></main>
+</div>
+
+<div id="cardmodal" class="modal" onclick="if(event.target===this)closeCard()"><div class="modal-inner"></div></div>
+
+<footer>
+  Interná pomôcka na skladanie deckov · dáta a obrázky kariet: <a href="https://ringsdb.com" target="_blank" rel="noopener">RingsDB</a> (Hall of Beorn).
+  Pool: Revised Core + Shadows of Mirkwood + Khazad‑dûm/Dwarrowdelf + Heirs of Númenor/Against the Shadow + LOTR Saga.
+</footer>
+
+<script>
+/* ================================================================== *
+ *  DATA — easy to edit.
+ *  Owned products (by RingsDB pack name). Ownership is checked by CARD
+ *  TITLE: a card is "owned" if that title appears in any owned pack, so
+ *  original vs. revised reprints both count.
+ * ================================================================== */
+const OWNED_PACKS = [
+  "Core Set","Revised Core Set",
+  // Shadows of Mirkwood cycle
+  "The Hunt for Gollum","Conflict at the Carrock","A Journey to Rhosgobel",
+  "The Hills of Emyn Muil","The Dead Marshes","Return to Mirkwood",
+  // Khazad-dûm + Dwarrowdelf cycle
+  "Khazad-dûm","Khazad-dum","The Redhorn Gate","Road to Rivendell",
+  "The Watcher in the Water","The Long Dark","Foundations of Stone","Shadow and Flame",
+  // Heirs of Númenor + Against the Shadow cycle
+  "Heirs of Númenor","Heirs of Numenor","The Steward's Fear","The Druadan Forest",
+  "The Drúadan Forest","Encounter at Amon Dîn","Encounter at Amon Din",
+  "Assault on Osgiliath","The Blood of Gondor","The Morgul Vale",
+  // Lord of the Rings Saga (revised trilogy = these player-card sources)
+  "The Black Riders","The Road Darkens","The Treason of Saruman",
+  "The Land of Shadow","The Flame of the West","The Mountain of Fire",
+  "The Fellowship of the Ring","The Two Towers","The Return of the King"
+];
+
+/* Scenario tree + thematic decks.
+ * deckIds = curated, real RingsDB decklist IDs (the app verifies each one
+ * against the pool + the 50-card rule when it loads them).
+ * You add more any time via the "Pridať decklist" box on each page. */
+const DATA = { groups: [
+
+  { id:"core", title:"Revised Core Set", subtitle:"Základná krabica · 3 scenáre", kind:"scenarios", items:[
+    { id:"passage", name:"Passage Through Mirkwood", cz:"Průchod Temným hvozdem", deckIds:[293,21985,24754], moreIds:[77,53457] },
+    { id:"anduin",  name:"Journey Along the Anduin",  cz:"Cesta po Anduině",       deckIds:[305,24754], moreIds:[11611,5698,24479,8457,16008] },
+    { id:"dolguldur", name:"Escape from Dol Guldur",  cz:"Útěk z Dol Gulduru",     deckIds:[307,5907,7586,8750], moreIds:[855], note:"Ťažký sólo scenár — nízke ohrozenie a obrana/liečenie sú kľúč." }
+  ]},
+
+  { id:"som", title:"Shadows of Mirkwood — cyklus", subtitle:"Stíny Temného hvozdu · 6 dobrodružstiev", kind:"scenarios", items:[
+    { id:"gollum",   name:"The Hunt for Gollum",     cz:"Hon na Gluma",             deckIds:[306,436], moreIds:[986,19792] },
+    { id:"carrock",  name:"Conflict at the Carrock",  cz:"Střet u Károku",           deckIds:[732,36460], moreIds:[10529] },
+    { id:"rhosgobel",name:"A Journey to Rhosgobel",   cz:"Cesta do Rhosgobelu",      deckIds:[733,40561], moreIds:[10839] },
+    { id:"emynmuil", name:"The Hills of Emyn Muil",   cz:"Kopce Emyn Muil",          deckIds:[734,11125] },
+    { id:"marshes",  name:"The Dead Marshes",         cz:"Mrtvé močály",             deckIds:[736], moreIds:[11428,6182] },
+    { id:"returnmw", name:"Return to Mirkwood",       cz:"Návrat do Temného hvozdu", deckIds:[737,19448,23297] }
+  ]},
+
+  { id:"dwarrow", title:"Khazad‑dûm & Dwarrowdelf — cyklus", subtitle:"9 scenárov", kind:"scenarios", items:[
+    { id:"intothepit",   name:"Into the Pit",           cz:"Do propasti",        deckIds:[20440,20551,6614,26395], moreIds:[856] },
+    { id:"seventhlevel", name:"The Seventh Level",       cz:"Sedmá úroveň",       deckIds:[20453,20632] },
+    { id:"flightmoria",  name:"Flight from Moria",       cz:"Útěk z Morie",       deckIds:[20468,24586] },
+    { id:"redhorn",      name:"The Redhorn Gate",        cz:"Rudorohská brána",   deckIds:[20475,4997] },
+    { id:"rivendell",    name:"Road to Rivendell",       cz:"Cesta do Roklinky",  deckIds:[5103], moreIds:[31201] },
+    { id:"watcher",      name:"The Watcher in the Water", cz:"Strážce ve vodě",   deckIds:[5097,25049] },
+    { id:"longdark",     name:"The Long Dark",           cz:"Dlouhá tma",         deckIds:[5103], moreIds:[25087,5479] },
+    { id:"foundations",  name:"Foundations of Stone",    cz:"Kamenné základy",    deckIds:[5103], moreIds:[5479] },
+    { id:"shadowflame",  name:"Shadow and Flame",        cz:"Stín a plamen",      deckIds:[38444,13831,2781] }
+  ]},
+
+  { id:"ats", title:"Heirs of Númenor & Against the Shadow — cyklus", subtitle:"9 scenárov", kind:"scenarios", items:[
+    { id:"pelargir",   name:"Peril in Pelargir",       cz:"Nebezpečí v Pelargiru", deckIds:[5288,17076,22282] },
+    { id:"ithilien",   name:"Into Ithilien",           cz:"Do Ithilienu",          deckIds:[26090], moreIds:[761] },
+    { id:"cairandros", name:"The Siege of Cair Andros", cz:"Obléhání Cair Androsu", deckIds:[5331,26168] },
+    { id:"stewardfear",name:"The Steward's Fear",       cz:"Správcův strach",       deckIds:[12795], moreIds:[9868] },
+    { id:"druadan",    name:"The Druadan Forest",       cz:"Drúadanský les",        deckIds:[59841], moreIds:[7326] },
+    { id:"amondin",    name:"Encounter at Amon Dîn",    cz:"Střetnutí u Amon Dînu", deckIds:[15123], moreIds:[59841] },
+    { id:"osgiliath",  name:"Assault on Osgiliath",     cz:"Útok na Osgiliath",     deckIds:[59841] },
+    { id:"bloodgondor",name:"The Blood of Gondor",      cz:"Krev Gondoru",          deckIds:[58938,59841], moreIds:[15561] },
+    { id:"morgulvale", name:"The Morgul Vale",          cz:"Morgulské údolí",       deckIds:[12970,7401] }
+  ]},
+
+  { id:"saga_fotr", title:"Saga · The Fellowship of the Ring", subtitle:"Spoločenstvo Prstenu · 6 scenárov", kind:"scenarios", items:[
+    { id:"shadowpast",  name:"A Shadow of the Past",     cz:"Stín minulosti",        deckIds:[18970] },
+    { id:"knifedark",   name:"A Knife in the Dark",      cz:"Nůž ve tmě",            deckIds:[9293,16332] },
+    { id:"flightford",  name:"Flight to the Ford",       cz:"Útěk k Brodu",          deckIds:[9293,16332], moreIds:[850] },
+    { id:"ringsouth",   name:"The Ring Goes South",      cz:"Prsten putuje na jih",  deckIds:[21753], moreIds:[33360,8866] },
+    { id:"mines",       name:"Journey in the Dark",      cz:"Cesta v temnotě (Moria)",deckIds:[16332], moreIds:[42972] },
+    { id:"breaking",    name:"Breaking of the Fellowship",cz:"Rozpad Společenstva",  deckIds:[12646] }
+  ]},
+
+  { id:"saga_tt", title:"Saga · The Two Towers", subtitle:"Dvě věže · 6 scenárov", kind:"scenarios", items:[
+    { id:"urukhai",     name:"The Uruk-hai",             cz:"Uruk-hai",              deckIds:[16332], moreIds:[59441,9160,22015] },
+    { id:"helmsdeep",   name:"Helm's Deep",              cz:"Helmův žleb",           deckIds:[22029,12656] },
+    { id:"isengard",    name:"The Road to Isengard",     cz:"Cesta do Železného pasu",deckIds:[12688], moreIds:[22066] },
+    { id:"marshes2",    name:"The Passage of the Marshes",cz:"Přechod přes močály",  deckIds:[12690], moreIds:[37144] },
+    { id:"crossroads",  name:"Journey to the Cross-roads",cz:"Cesta na Křižovatku",  deckIds:[16332], moreIds:[10516] },
+    { id:"shelob",      name:"Shelob's Lair",            cz:"Odulino doupě",         deckIds:[12707] }
+  ]},
+
+  { id:"saga_rotk", title:"Saga · The Return of the King", subtitle:"Návrat krále · 6 scenárov", kind:"scenarios", items:[
+    { id:"greycompany", name:"The Passing of the Grey Company", cz:"Cesta Šedé družiny",   deckIds:[12711] },
+    { id:"siegegondor", name:"The Siege of Gondor",         cz:"Obléhání Gondoru",           deckIds:[16332] },
+    { id:"pelennor",    name:"The Battle of the Pelennor Fields", cz:"Bitva na Pelennorských polích", deckIds:[9730,13464,12776], moreIds:[638,639] },
+    { id:"cirithungol", name:"The Tower of Cirith Ungol",   cz:"Věž Cirith Ungol",           deckIds:[12829] },
+    { id:"blackgate",   name:"The Black Gate Opens",        cz:"Černá brána se otevírá",     deckIds:[12833] },
+    { id:"mountdoom",   name:"Mount Doom",                  cz:"Hora osudu",                 deckIds:[12844] }
+  ]},
+
+  { id:"themes", title:"Tematické balíky", subtitle:"Archetypy naprieč scenármi", kind:"themes", items:[
+    { id:"dwarves", name:"Trpaslíci", cz:"Dwarves — swarm & mining",   deckIds:[104,8313,6538,856,842,659], moreIds:[739,740,817,632,631,753] },
+    { id:"rohan",   name:"Rohan",     cz:"Rohan — willpower & tempo",  deckIds:[23297,765,790,780], moreIds:[848,834,8271,827] },
+    { id:"hobbits", name:"Hobiti",    cz:"Hobbits — saga hrdinovia",   deckIds:[763,660,9547], moreIds:[7217,7647] },
+    { id:"elves",   name:"Elfovia",   cz:"Elves — Noldor & Imladris",  deckIds:[782,783,641,437], moreIds:[438,640,852,645] },
+    { id:"gondor",  name:"Gondor",    cz:"Gondor — obrana & zdroje",   deckIds:[5090,434,840,838], moreIds:[839,841,420,755,3659,762,779] },
+    { id:"eagles",  name:"Orli",      cz:"Eagles — tactics tempo",     deckIds:[764,778,418], moreIds:[3235,444] },
+    { id:"outlands",name:"Outlands",  cz:"Outlands — Gondorský swarm (Hirluin)", deckIds:[35262], moreIds:[9192,15083] },
+    { id:"traps",   name:"Pasce / Rangers of Ithilien", cz:"Traps — Damrod & Faramir", deckIds:[9113], moreIds:[735,4293] },
+    { id:"noldor",  name:"Noldor",       cz:"Noldor — Elrond & Vilya value",  deckIds:[8682], moreIds:[782,645] },
+    { id:"monotactics", name:"Mono‑Tactics", cz:"Čistý boj — zbrane & brnenie", deckIds:[2306], moreIds:[8297] },
+    { id:"monospirit",  name:"Mono‑Spirit",  cz:"Questing & threat control",   deckIds:[984], moreIds:[7294] },
+    { id:"secrecy", name:"Secrecy",       cz:"Nízke ohrozenie — lacné karty",  deckIds:[23431], moreIds:[19943] }
+  ]}
+
+]};
+
+/* ================================================================== *
+ *  ENGINE
+ * ================================================================== */
+const RDB = "https://ringsdb.com";
+const SPHERE_COLORS = { leadership:"--leadership",tactics:"--tactics",spirit:"--spirit",
+  lore:"--lore",neutral:"--neutral",baggins:"--baggins",fellowship:"--fellowship" };
+const TYPE_ORDER = ["hero","ally","attachment","event","player-side-quest","treasure"];
+const TYPE_LABEL = { hero:"Hrdinovia", ally:"Spojenci", attachment:"Prílohy",
+  event:"Udalosti", "player-side-quest":"Vedľajšie úlohy", treasure:"Poklady", other:"Ostatné" };
+
+const $ = s => document.querySelector(s);
+const statusEl = $("#status");
+function setStatus(msg,isErr){ statusEl.textContent = msg||""; statusEl.classList.toggle("err",!!isErr); }
+function norm(s){ return (s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+  .replace(/[’'`]/g,"'").replace(/\s+/g," ").trim(); }
+
+/* ---- localStorage helpers ---- */
+function lsGet(k,def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):def; }catch(e){ return def; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+
+/* ---- network: fetch first, JSONP fallback (RingsDB supports ?jsonp=) ---- */
+function jsonp(url,param){
+  return new Promise((res,rej)=>{
+    const cb="__rdb_"+Math.random().toString(36).slice(2);
+    const s=document.createElement("script"); let done=false;
+    window[cb]=d=>{done=true;res(d);clean();};
+    function clean(){ try{delete window[cb];}catch(e){window[cb]=undefined;} s.remove(); }
+    s.onerror=()=>{ if(!done){clean();rej(new Error("jsonp"));} };
+    s.src=url+(url.includes("?")?"&":"?")+param+"="+cb;
+    document.head.appendChild(s);
+    setTimeout(()=>{ if(!done){clean();rej(new Error("timeout"));} },20000);
+  });
+}
+async function getJSON(url){
+  try{ const r=await fetch(url,{mode:"cors"}); if(r.ok) return await r.json(); }catch(e){}
+  try{ return await jsonp(url,"jsonp"); }catch(e){}
+  try{ return await jsonp(url,"callback"); }catch(e){}
+  throw new Error("RingsDB nedostupné");
+}
+
+/* ---- card database ---- */
+const CARDS = { byCode:{}, ownedTitles:new Set(), loaded:false };
+const PLAYER_TYPES = new Set(["hero","ally","attachment","event","player-side-quest","treasure"]);
+const OWNED_NORM = new Set(OWNED_PACKS.map(norm));
+
+async function loadCards(force){
+  const CACHE="lotr_cards_v2";
+  if(!force){
+    const c=lsGet(CACHE,null);
+    if(c && c.t && (Date.now()-c.t < 1000*60*60*24*30) && Array.isArray(c.d)){ indexCards(c.d); return; }
+  }
+  setStatus("Načítavam databázu kariet z RingsDB…");
+  const data = await getJSON(RDB+"/api/public/cards/");
+  lsSet(CACHE,{t:Date.now(),d:data});
+  indexCards(data);
+}
+function indexCards(list){
+  CARDS.byCode={}; CARDS.ownedTitles=new Set();
+  for(const c of list){
+    CARDS.byCode[c.code]=c;
+    if(OWNED_NORM.has(norm(c.pack_name))) CARDS.ownedTitles.add(norm(c.name));
+  }
+  CARDS.loaded=true;
+}
+function cardImg(c){
+  const src = c && c.imagesrc ? c.imagesrc : null;
+  if(src) return src.startsWith("http")?src:RDB+src;
+  return RDB+"/bundles/cards/"+ (c?c.code:"") +".png";
+}
+function isOwnedCard(c){ return c && CARDS.ownedTitles.has(norm(c.name)); }
+
+/* ---- deck cache + parse ---- */
+const DECK_CACHE={};
+async function loadDeck(id){
+  if(DECK_CACHE[id]) return DECK_CACHE[id];
+  const CK="lotr_deck_"+id;
+  let raw=lsGet(CK,null);
+  if(!raw){
+    raw=await getJSON(RDB+"/api/public/decklist/"+id+".json");
+    lsSet(CK,raw);
+  }
+  const parsed=parseDeck(raw); DECK_CACHE[id]=parsed; return parsed;
+}
+function parseDeck(raw){
+  const slots=Object.assign({}, raw.slots||{});
+  if(raw.heroes) for(const c in raw.heroes){ if(!(c in slots)) slots[c]=raw.heroes[c]; }
+  const heroes=[]; const byType={};
+  let playerCount=0, threat=0; const missingCodes=[], notOwned=[];
+  for(const code in slots){
+    const qty=slots[code]|0; if(qty<=0) continue;
+    const card=CARDS.byCode[code];
+    if(!card){ missingCodes.push(code); continue; }
+    if(card.type_code==="hero"){ heroes.push({card,qty}); threat+=(+card.threat||0); }
+    else { playerCount+=qty; (byType[card.type_code]=byType[card.type_code]||[]).push({card,qty}); }
+    if(!isOwnedCard(card)){ for(let i=0;i<Math.min(qty,1);i++) notOwned.push(card.name); }
+  }
+  heroes.sort((a,b)=>(a.card.name>b.card.name?1:-1));
+  const startThreat = (typeof raw.starting_threat==="number" && raw.starting_threat>0)? raw.starting_threat : threat;
+  return {
+    id:raw.id, name:(raw.name||"Bez názvu").replace(/\s+/g," ").trim(),
+    author:raw.username||raw.user_name||"", description:raw.description_md||"",
+    lastPack:raw.last_pack||"", heroes, byType, playerCount,
+    threat:startThreat,
+    valid50: playerCount>=50,
+    fullyOwned: notOwned.length===0 && missingCodes.length===0,
+    notOwned:[...new Set(notOwned)], missingCodes
+  };
+}
+
+/* ---- user-added decks ---- */
+function userDecks(itemKey){ const all=lsGet("lotr_user_decks",{}); return all[itemKey]||[]; }
+function addUserDeck(itemKey,id){
+  const all=lsGet("lotr_user_decks",{}); const arr=all[itemKey]||[];
+  if(!arr.includes(id)){ arr.push(id); all[itemKey]=arr; lsSet("lotr_user_decks",all); }
+}
+function removeUserDeck(itemKey,id){
+  const all=lsGet("lotr_user_decks",{}); all[itemKey]=(all[itemKey]||[]).filter(x=>x!==id);
+  lsSet("lotr_user_decks",all);
+}
+function findItem(groupId,itemId){  const g=DATA.groups.find(x=>x.id===groupId); if(!g) return null;
+  const it=g.items.find(x=>x.id===itemId); return it?{g,it}:null;
+}
+function isCuratedId(id){ id=+id;
+  return DATA.groups.some(g=>g.items.some(it=>(it.deckIds||[]).includes(id)));
+}
+
+/* ================================================================== *
+ *  RENDER
+ * ================================================================== */
+const view=$("#view");
+function esc(s){ return (s||"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m])); }
+
+function renderLegend(){
+  const items=[["Leadership","leadership"],["Tactics","tactics"],["Spirit","spirit"],
+    ["Lore","lore"],["Neutral","neutral"]];
+  $("#legend").innerHTML = items.map(([n,k])=>
+    `<span><i class="sdot" style="--c:var(--${k})"></i>${n}</span>`).join("");
+}
+
+function heroPortraits(heroes){
+  if(!heroes.length) return `<div class="hero-port"></div>`;
+  return heroes.map(h=>{
+    const sph=SPHERE_COLORS[h.card.sphere_code]||"--neutral";
+    return `<div class="hero-port" style="--sphere:var(${sph})" title="${esc(h.card.name)}">
+      <img loading="lazy" src="${cardImg(h.card)}" alt="${esc(h.card.name)}"
+      onerror="this.style.display='none'"></div>`;
+  }).join("");
+}
+function sphereDots(heroes){
+  const seen=new Set(); let out="";
+  heroes.forEach(h=>{ const s=h.card.sphere_code; if(!seen.has(s)){seen.add(s);
+    out+=`<i class="sdot" style="--c:var(${SPHERE_COLORS[s]||"--neutral"})"></i>`;} });
+  return `<span class="spheres">${out}</span>`;
+}
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  setCrumbs("");
+  let html="";
+  for(const g of DATA.groups){
+    const tiles=g.items.map(it=>{
+      const key=g.id+"/"+it.id;
+      const total=(it.deckIds?.length||0)+(it.moreIds?.length||0)+userDecks(key).length;
+      const cnt = total ? `${total} deck${total===1?"":total<5?"y":"ov"}` : "žiadne decky · pridaj";
+      return `<div class="tile ${g.kind==='themes'?'theme':''}" onclick="go('list','${g.id}','${it.id}')">
+        <div class="en">${esc(it.name)}</div>
+        <div class="cz">${esc(it.cz||"")}</div>
+        <div class="cnt">${cnt}</div>
+        ${it.note?`<div class="note">${esc(it.note)}</div>`:""}
+      </div>`;
+    }).join("");
+    html+=`<section class="section">
+      <div class="head"><h2>${esc(g.title)}</h2><span class="meta">${esc(g.subtitle||"")}</span></div>
+      <div class="grid">${tiles}</div></section>`;
+  }
+  view.innerHTML=html; window.scrollTo(0,0);
+}
+
+/* ---------- DECK LIST for one scenario/theme ---------- */
+async function renderList(groupId,itemId){
+  const found=findItem(groupId,itemId);
+  if(!found){ renderHome(); return; }
+  const {g,it}=found; const key=g.id+"/"+it.id;
+  setCrumbs(`<a onclick="go('home')">Domov</a> › <a onclick="go('home')">${esc(g.title)}</a> › ${esc(it.name)}`);
+
+  const seed=(it.deckIds||[]).map(id=>({id,user:false,star:true}));
+  const more=(it.moreIds||[]).map(id=>({id,user:false,star:false}));
+  const usr=userDecks(key).map(id=>({id,user:true,star:false}));
+  const all=[...seed,...more,...usr];
+
+  view.innerHTML=`
+    <section class="section" style="margin-top:22px">
+      <div class="head scenario">
+        <h2>${esc(it.name)}</h2>
+        <span class="meta">${it.cz?"<i>"+esc(it.cz)+"</i>":""}</span>
+      </div>
+      ${TIPS[it.id]?`<div class="tipbox"><b>🧭 Na čo mysli pri decku</b><br>${esc(TIPS[it.id])} <span style="color:var(--parch-dim)">· viac v <a onclick="go('guide')" style="cursor:pointer">Ako stavať decky</a></span></div>`:""}
+      <div class="addbox">
+        <label>Pridať vlastný decklist:</label>
+        <input id="addInput" placeholder="Vlož odkaz z RingsDB alebo ID (napr. https://ringsdb.com/decklist/view/21985/…)">
+        <button class="btn" id="addBtn">Pridať decklist</button>
+        <a class="btn" href="https://ringsdb.com/decklists/find" target="_blank" rel="noopener">Hľadať decky na RingsDB ↗</a>
+      </div>
+      <div class="starnote"><span class="s">★</span> = odporúčaný, overený výber. Ostatné sú doplnkové varianty pre väčšiu rôznorodosť.</div>
+      <div class="decks" id="decks"></div>
+      <div class="empty" id="allHidden" style="display:none"><b>Žiadne hrateľné decky pre tento scenár</b>
+        Všetky decky tu obsahovali karty mimo tvojej zbierky a sú skryté. Odškrtni voľbu „Skryť decky s kartami mimo zbierky" hore, alebo pridaj vlastný hrateľný decklist.</div>
+      ${all.length?"":`<div class="empty"><b>Zatiaľ tu nie sú žiadne decky</b>
+        Nájdi vhodný sólo decklist na RingsDB (len z tvojho poolu) a vlož jeho odkaz vyššie.
+        Appka overí, či ho vieš celý poskladať a či má 50 kariet.</div>`}
+    </section>`;
+
+  const wrap=$("#decks");
+  all.forEach(d=>{
+    const el=document.createElement("div");
+    el.className="deck"; el.id="deck-"+d.id;
+    el.innerHTML=`<div class="loading"><span class="spin"></span>Načítavam deck #${d.id}…</div>`;
+    if(d.user){
+      const rm=document.createElement("button"); rm.className="remove"; rm.textContent="Odobrať";
+      rm.onclick=(e)=>{e.stopPropagation();removeUserDeck(key,d.id);renderList(groupId,itemId);};
+      el.appendChild(rm);
+    }
+    wrap.appendChild(el);
+    hydrateDeckCard(d.id,el,d.star);
+  });
+
+  $("#addBtn").onclick=()=>{
+    const raw=$("#addInput").value.trim();
+    const m=raw.match(/(\d{2,})/); if(!m){ setStatus("Nerozpoznal som ID decku v odkaze.",true); return; }
+    addUserDeck(key,+m[1]); renderList(groupId,itemId);
+  };
+  $("#addInput").addEventListener("keydown",e=>{ if(e.key==="Enter")$("#addBtn").click(); });
+  applyOwnedFilter();
+}
+
+async function hydrateDeckCard(id,el,star){
+  try{
+    const d=await loadDeck(id);
+    const okBadge = d.valid50
+      ? (d.fullyOwned ? `<span class="pill ok">✓ poskladateľné</span>`
+                      : `<span class="pill warn">⚠ ${d.notOwned.length+d.missingCodes.length} kariet mimo zbierky</span>`)
+      : `<span class="pill warn">⚠ len ${d.playerCount} kariet (&lt;50)</span>`;
+    el.dataset.buildable = (d.valid50 && d.fullyOwned) ? "1":"0";
+    el.dataset.owned = d.fullyOwned ? "1":"0";
+    el.innerHTML = `
+      ${el.querySelector(".remove")?el.querySelector(".remove").outerHTML:""}
+      ${star?'<span class="star" title="Odporúčaný, overený výber">★</span>':''}
+      <div class="heroes">${heroPortraits(d.heroes)}</div>
+      <div class="body">
+        <div class="name">${esc(d.name)}</div>
+        ${d.author?`<div class="by">od ${esc(d.author)}</div>`:""}
+        <div class="stats">
+          <span class="pill threat">Threat <b>${d.threat}</b></span>
+          <span class="pill">${d.playerCount} kariet</span>
+          ${sphereDots(d.heroes)}
+        </div>
+        <div class="stats">${okBadge}</div>
+      </div>`;
+    el.onclick=(e)=>{ if(e.target.classList.contains("remove"))return; go("deck",id); };
+    // re-attach remove handler if present
+    const rm=el.querySelector(".remove");
+    if(rm){ rm.onclick=(e)=>{e.stopPropagation(); const k=currentItemKey(); if(k){removeUserDeck(k,id);} renderRoute();}; }
+    applyOwnedFilter();
+  }catch(err){
+    el.innerHTML=`<div class="derr">Deck #${id} sa nepodarilo načítať z RingsDB.
+      Skontroluj pripojenie alebo <a href="${RDB}/decklist/view/${id}" target="_blank" rel="noopener">otvor ho priamo ↗</a></div>`;
+  }
+}
+
+/* ---------- DECK DETAIL ---------- */
+async function renderDeck(id){
+  setCrumbs(`<a onclick="go('home')">Domov</a> › <a onclick="history.back()">Späť</a> › Deck #${id}`);
+  view.innerHTML=`<div class="status"><span class="spin"></span>Načítavam deck #${id}…</div>`;
+  let d;
+  try{ d=await loadDeck(id); }
+  catch(e){ view.innerHTML=`<div class="empty"><b>Deck sa nepodarilo načítať</b>
+    <a href="${RDB}/decklist/view/${id}" target="_blank" rel="noopener">Otvoriť na RingsDB ↗</a></div>`; return; }
+
+  const buildBadge = d.valid50
+    ? (d.fullyOwned?`<span class="pill ok">✓ celé poskladateľné z tvojej zbierky</span>`
+        :`<span class="pill warn">⚠ obsahuje karty mimo zbierky</span>`)
+    : `<span class="pill warn">⚠ len ${d.playerCount} kariet — nespĺňa pravidlo 50</span>`;
+
+  let groupsHtml="";
+  for(const t of TYPE_ORDER){
+    if(t==="hero") continue;
+    const arr=d.byType[t]; if(!arr||!arr.length) continue;
+    arr.sort((a,b)=> (a.card.sphere_code||"").localeCompare(b.card.sphere_code||"") || a.card.name.localeCompare(b.card.name));
+    const sub=arr.reduce((s,x)=>s+x.qty,0);
+    groupsHtml+=`<div class="cardgroup"><h3>${TYPE_LABEL[t]||t}<span class="g-cnt">${sub} ks</span></h3>
+      <div class="cardgrid">${arr.map(cardTile).join("")}</div></div>`;
+  }
+  // any unknown types
+  const known=new Set(TYPE_ORDER);
+  Object.keys(d.byType).filter(t=>!known.has(t)).forEach(t=>{
+    const arr=d.byType[t]; const sub=arr.reduce((s,x)=>s+x.qty,0);
+    groupsHtml+=`<div class="cardgroup"><h3>${TYPE_LABEL[t]||t}<span class="g-cnt">${sub} ks</span></h3>
+      <div class="cardgrid">${arr.map(cardTile).join("")}</div></div>`;
+  });
+
+  const missNote = (d.notOwned.length||d.missingCodes.length)
+    ? `<div class="desc" style="border-left-color:var(--ember)"><h3>Pozor — mimo tvojej zbierky</h3>
+        <p>${d.notOwned.length?esc(d.notOwned.join(", ")):""}${d.missingCodes.length?` (a ${d.missingCodes.length} neznámych kariet)`:""}.
+        Tieto karty nie sú z tvojich produktov — deck nahraď alebo uprav.</p></div>` : "";
+
+  view.innerHTML=`
+    <section class="section" style="margin-top:16px">
+      <div class="detail-head">
+        <div class="heroes">${heroPortraits(d.heroes)}</div>
+        <div class="detail-title">
+          <h2>${esc(d.name)}${isCuratedId(id)?'<span class="star" title="Odporúčaný, overený výber">★</span>':''}</h2>
+          ${d.author?`<div class="by">od ${esc(d.author)}${d.lastPack?` · pool do: ${esc(d.lastPack)}`:""}</div>`:""}
+          <div class="detail-stats">
+            <span class="pill threat big-threat">Počiatočné ohrozenie · <b>${d.threat}</b></span>
+            <span class="pill">${d.heroes.length} hrdinovia</span>
+            <span class="pill">${d.playerCount} kariet v decku</span>
+            ${buildBadge}
+          </div>
+          <div class="detail-stats"><a class="btn" href="${RDB}/decklist/view/${id}" target="_blank" rel="noopener">Otvoriť na RingsDB ↗</a></div>
+        </div>
+      </div>
+      ${missNote}
+      ${groupsHtml}
+      ${d.description?`<div class="desc" id="descBox"><h3>Ako deck hrať</h3>
+        <div id="descBody"><span class="spin"></span> Prekladám popis do češtiny…</div>
+        <div class="desc-lang" id="descLang"></div></div>`:""}
+    </section>`;
+  window.scrollTo(0,0);
+  if(d.description) setupDesc(d.description);
+}
+function cardTile(x){
+  const owned=isOwnedCard(x.card);
+  return `<div class="card ${owned?"":"notowned"}">
+    <span class="qty">${x.qty}×</span>
+    <div class="imgwrap">
+      <img loading="lazy" src="${cardImg(x.card)}" alt="${esc(x.card.name)}" onerror="this.parentNode.classList.add('noimg')">
+      ${owned?"":`<span class="flag">mimo zbierky</span>`}
+    </div>
+    <div class="cname"><b class="cn-qty">${x.qty}×</b> ${esc(x.card.name)}</div>
+  </div>`;
+}
+/* lightweight, safe markdown-ish renderer for RingsDB descriptions */
+function renderMd(md){
+  let s=esc(md);
+  s=s.replace(/<span class="icon-(\w+)"><\/span>/g,(m,k)=>` [${k}] `); // already escaped? handle below
+  // the above won't match because esc turned < into &lt; — handle escaped version:
+  s=s.replace(/&lt;span class="icon-(\w+)"&gt;&lt;\/span&gt;/g,(m,k)=>` <i class="sdot" style="--c:var(${SPHERE_COLORS[k]||"--neutral"});display:inline-block;vertical-align:middle"></i> `);
+  s=s.replace(/&lt;\/?b&gt;/g,m=>m.includes("/")?"</b>":"<b>");
+  s=s.replace(/&lt;\/?i&gt;/g,m=>m.includes("/")?"</i>":"<i>");
+  s=s.replace(/&lt;\/?u&gt;/g,m=>m.includes("/")?"</u>":"<u>");
+  s=s.replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>");
+  s=s.replace(/\[([^\]]+)\]\(\/card\/[^)]+\)/g,"<b>$1</b>");   // card links -> just the name
+  s=s.replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+  s=s.split(/\n{2,}/).map(p=>`<p>${p.replace(/\n/g,"<br>")}</p>`).join("");
+  return s;
+}
+function stripMd(md){
+  return md.replace(/&lt;[^&]*&gt;/g,"").replace(/<[^>]*>/g,"")
+    .replace(/\*\*/g,"").replace(/\[([^\]]+)\]\([^)]*\)/g,"$1").replace(/[#*_`]/g,"").trim();
+}
+function cyrb(str){ let h=2166136261>>>0; for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619); } return (h>>>0).toString(36); }
+
+/* Machine-translate EN description -> CZ via Google's public gtx endpoint, cached. */
+async function translateToCS(text){
+  const key="lotr_tr_"+cyrb(text);
+  const cached=lsGet(key,null); if(cached!==null) return cached;
+  const chunks=[]; let cur="";
+  for(const part of text.split(/\n\n/)){
+    if((cur+part).length>3500){ if(cur)chunks.push(cur); cur=part; }
+    else cur+=(cur?"\n\n":"")+part;
+  }
+  if(cur)chunks.push(cur);
+  let out="";
+  for(const ch of chunks){
+    const url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=cs&dt=t&q="+encodeURIComponent(ch);
+    const r=await fetch(url); if(!r.ok) throw new Error("tr");
+    const data=await r.json();
+    out+=(data[0]||[]).map(s=>s[0]).join("");
+  }
+  lsSet(key,out); return out;
+}
+
+/* description block: default CZ (translated), toggle to EN original */
+async function setupDesc(md){
+  const body=$("#descBody"), lang=$("#descLang");
+  let TR=null, mode="cz";
+  async function show(){
+    if(mode==="en"){
+      body.innerHTML=renderMd(md);
+      lang.innerHTML=`<a href="#" onclick="__descToggle();return false">Zobraziť český preklad</a>`;
+      return;
+    }
+    if(TR===null){
+      body.innerHTML=`<span class="spin"></span> Prekladám popis do češtiny…`;
+      try{ TR=await translateToCS(md); }catch(e){ TR=false; }
+    }
+    if(TR===false){
+      body.innerHTML=renderMd(md);
+      lang.innerHTML=`<span class="tr-note">Automatický preklad práve nie je dostupný — zobrazený je originál.</span>
+        <a href="https://translate.google.com/?sl=en&tl=cs&op=translate&text=${encodeURIComponent(stripMd(esc(md)))}" target="_blank" rel="noopener">Preložiť cez Google ↗</a>`;
+    } else {
+      body.innerHTML=renderMd(TR);
+      lang.innerHTML=`<a href="#" onclick="__descToggle();return false">Originál jazyk (EN)</a>`;
+    }
+  }
+  window.__descToggle=()=>{ mode=(mode==="cz")?"en":"cz"; show(); };
+  show();
+}
+
+/* ---------- owned-only filter ---------- */
+function applyOwnedFilter(){
+  const hide = $("#onlyOwned").checked && CARDS.loaded;
+  let visible=0, known=0;
+  document.querySelectorAll(".deck").forEach(el=>{
+    const owned=el.dataset.owned;
+    if(owned===undefined){ el.style.display=""; return; }   // not hydrated yet
+    known++;
+    if(hide && owned==="0"){ el.style.display="none"; }
+    else { el.style.display=""; visible++; }
+  });
+  const note=document.getElementById("allHidden");
+  if(note) note.style.display=(hide && known>0 && visible===0)?"":"none";
+}
+$("#onlyOwned").addEventListener("change",applyOwnedFilter);
+
+/* ---------- routing ---------- */
+function setCrumbs(html){
+  let c=$("#crumbs");
+  if(!c){ c=document.createElement("div"); c.id="crumbs"; c.className="crumbs";
+    view.parentNode.insertBefore(c,view); }
+  c.innerHTML=html;
+}
+let CURRENT={view:"home"};
+function currentItemKey(){ return CURRENT.view==="list"?(CURRENT.g+"/"+CURRENT.it):null; }
+/* per-scenario "what the encounter deck does / what to consider" tips */
+const TIPS={
+  passage:"Ľahký úvod. Pár pavúkov v staging — priprav si trochu útoku a Forest Snare/Feint. Rýchlo questuj, threat drž nízko.",
+  anduin:"Hneď na štarte veľký Hill Troll v staging area. Buď ho zamkni (Forest Snare), alebo ho zabi — potrebuješ obranu aj úder. Pozor na threat 30+ (odhalí ďalšieho trolla).",
+  dolguldur:"Jeden hrdina je na začiatku zajatý (hráš len s dvomi) a vysoký threat spúšťa nasty efekty. Drž nízke ohrozenie, priprav obranu + liečenie a A Test of Will na kľúčové treachery.",
+  gollum:"Zbieraš stopy (clue objektívy) — potrebuješ vôľu aj trochu boja na Mordor nepriateľov. Nízky threat pomáha; hodí sa location control.",
+  carrock:"Traja obrí Trollovia — bez odpovede ťa rozdrvia. Využi objektív Grimbeorn, priprav silný úder/obranu alebo Forest Snare a manažuj threat.",
+  rhosgobel:"Musíš vyliečiť objektív Wilyador — vezmi healing (Warden of Healing, Radagast) a Ranged/lietajúce postavy. Location control uľahčí questovanie.",
+  emynmuil:"Lokačný „bludiskový“ quest s direct‑damage treachery, málo nepriateľov. Ťaž location control (Northern Tracker, Asfaloth) a A Test of Will.",
+  marshes:"Escape testy (druhé questovanie vôľou) a unikajúci Glum. Potrebuješ vysokú vôľu a chumpy na testy; Rumour/scrying pomáha.",
+  returnmw:"Ťažký záver cyklu — pavúky Attercop a bolestivé treachery. Threat reduction (Beravor + Unexpected Courage), Forest Snare na veľkých, dosť vôle.",
+  intothepit:"Lokačný quest so „svetlom/torch“ mechanikou v Morii. Rieš lokácie (location control) a maj trochu boja na goblinov.",
+  seventhlevel:"Priamy bojový quest — húf goblinov + Cave Troll. Vezmi obranu a plošné zabíjanie (Thalin, Gondorian Spearman), Feint na trolla.",
+  flightmoria:"Preteky von z Morie — treachery a lokácie tlačia threat. Rieš lokácie rýchlo a drž ohrozenie nízko.",
+  redhorn:"Escortuješ Arwen cez zasnežený priesmyk; wargovia a lokácie. Location control + obrana proti wargom, threat management.",
+  rivendell:"Pokračovanie escortu — nočné prepady dvíhajú threat, wargovia. Threat reduction a spoľahlivá obrana.",
+  watcher:"Boss „Watcher“ s chápadlami pri bráne. Silný úder aj obranca a location control, aby si sa dostal cez lokácie.",
+  longdark:"Séria „locate“ testov — kľúčová je veľká ruka kariet a nikdy nequestovať do mínusu. Card draw + scrying, nízky threat.",
+  foundations:"Dungeon crawl s Nameless nepriateľmi a discardom ruky (Watchful Eyes). Odolnosť voči discardu/recursion a liečenie.",
+  shadowflame:"Boss Balrog (Durin's Bane) — puzzle. Odkladaj jeho útoky (Elrond's Counsel, nízky threat), maj tvrdého obrancu (Burning Brand) a burst na dokončenie.",
+  pelargir:"Battle questing — questuješ ÚTOKOM, nie vôľou. Vezmi dosť útoku aj na quest a silného obrancu (Aragorn).",
+  ithilien:"Skorý Mûmak a Archery. Priprav pevnú obranu (Gondorian Shield), healing proti Archery a Feint na oddialenie.",
+  cairandros:"Siege questing — questuješ OBRANOU. Silná obrana a schopnosť brániť lokácie/mesto.",
+  stewardfear:"Skryté (underworld) karty a swingy „plot“ efekty; nepriatelia každé kolo. Stály obranca (Beregond), akčná výhoda a A Test of Will.",
+  druadan:"Hľadáš Ghân‑buri‑Ghâna — viac lokácií, menej boja. Location control a rýchly quest.",
+  amondin:"Zachraňuješ dedinčanov proti času, dve encounter karty v jednej fáze. Rýchly setup, plošné zabíjanie a healing.",
+  osgiliath:"Silne lokačný, pomalý scenár — musíš odhaľovať lokácie. Trpezlivosť, location control a scrying (Palantir).",
+  bloodgondor:"Skryté karty + boss Black Númenórean. Drž threat, zabi bossa skoro; A Test of Will a spoľahlivá obrana.",
+  morgulvale:"Štartová Morgul Vale lokácia + Orc Vanguard môžu zablokovať postup; Nazgûl. Location control (Asfaloth/Secret Paths), tvrdý obranca, threat down.",
+  shadowpast:"Hide testy — drž nízke ohrozenie, Nazgûl v pätách. Hobbiti + vôľa + threat reduction.",
+  knifedark:"Vetrov (Weathertop) — Nazgûl útočia, Frodo zranený. Obrana + healing a nízky threat.",
+  flightford:"Preteky k Brodu (rast threatu), Ringwraiths. Rýchla vôľa a threat reduction; boju sa radšej vyhýbaj.",
+  ringsouth:"Wargovia + Caradhras lokácie s tvrdými efektmi, keď ostanú aktívne. Location control a obrana proti wargom.",
+  mines:"Moria — Cave Troll a goblini (v kampani hrozí Balrog). Obrana/úder a nízky threat.",
+  breaking:"Uruk‑hai útočia pri Amon Hen. Silná vôľa aj obrana; v kampani chráň postavy pred zajatím/burdenmi.",
+  urukhai:"Prenasleduješ Uruk‑hai (Merry/Pippin zajatí) — potrebuješ rýchlosť a úder. Klasika: Three Hunters (Aragorn/Legolas/Gimli).",
+  helmsdeep:"Battle — bránenie Helmovho žľabu proti záplave Uruk‑hai. Masívna obrana + plošný úder (Rohan).",
+  isengard:"Miernejší quest — Saruman/Gríma, treba vysokú vôľu. Ent spojenci (Treebeard/Quickbeam) a questing.",
+  marshes2:"Glum + Mŕtve močály (Mire efekty), undead. Nízky threat, tvrdí hobbití obrancovia a condition removal.",
+  crossroads:"Tvrdý postup k Rozcestiu — Harad a nepriatelia. Rangers of Ithilien (Mablung/Damrod) a pasce.",
+  shelob:"Boss Odula (Shelob) + Glum, Frodo zajatý. Silný obranca (Mablung + Gondorian Shield) a burst úder na Odulu.",
+  greycompany:"Cesta Mŕtvych — rast threatu, fantómoví nepriatelia, prázdna štartová ruka. Card draw na obnovu ruky, threat reduction, Aragorn.",
+  siegegondor:"Siege — bránenie Minas Tirith, Trollovia a katapulty. Silná obrana + vôľa cez siege a healing.",
+  pelennor:"Bitka — Nazgûl/Wraith a Mûmakil. Rohan swarm, burst na Nazgûla a pevná obrana.",
+  cirithungol:"Frodo zajatý; Wraith on Wings a Shagrat (nedá sa chumpovať). Rýchla vôľa, odpoveď na bossa a healing.",
+  blackgate:"„Takmer nevyhrateľný“ — obrovské množstvo nepriateľov, musíš questovať a vydržať. Masívna vôľa (Gondor/Erestor swarm) a výdrž.",
+  mountdoom:"Fortitude testy, vyčerpaní Frodo/Sam. Vysoká vôľa na testy, threat management a Phial of Galadriel; drž sa do ~10. kola."
+};
+
+/* ==================================================================
+ *  CARD ANALYSIS — esenciálne zhrnutia (dopĺňané po setoch).
+ *  Kľúč: "názov|sfera" pre hrdinov a viacverziové karty, inak "názov".
+ * ================================================================== */
+const ANALYSIS = {
+  // --- Základná krabica: hrdinovia ---
+  "aragorn|leadership":"Špičkový všestranný hrdina — solídny vo všetkom, Sentinel a s doplnkom Sword that was Broken vie resetovať threat. Skvelý obranca aj kotva questu.",
+  "theodred|leadership":"Motor zdrojov: vloží zdroj na questujúcu postavu ľubovoľnej sféry. Rozbieha deck, no má len 4 HP — chráň ho (direct damage ho zabíja).",
+  "gloin|leadership":"Za každé utŕžené poškodenie získa zdroj. So spoľahlivým liečením (Warden of Healing) silný ekonomický motor, bez neho rizikový.",
+  "gimli|tactics":"Jeho útok rastie s utŕženým poškodením — s liečením a Citadel Plate vražedný stroj. Výborný sólo útočník.",
+  "legolas|tactics":"Zabitie nepriateľa dá 2 postup na quest — spája boj a questovanie. Patrí do takmer každého Tactics decku.",
+  "thalin|tactics":"Počas questu dá 1 poškodenie každému odhalenému nepriateľovi — ničí swarm a slabé encounter spojence ešte pred vstupom do hry. K tomu slušná vôľa.",
+  "eowyn|spirit":"Najlepšia questovacia hrdinka — 4 vôle a discardom karty pridá +2. Základ Spirit questing deckov.",
+  "dunhere|spirit":"Vie útočiť na nepriateľov priamo v staging area — nika, ale silná proti bossom, ktorých nechceš engage-núť.",
+  "eleanor|spirit":"Raz za kolo (vyčerpaním) zruší when-revealed treachery — cancel priamo z hrdinu. Poistka, kým nemáš A Test of Will.",
+  "denethor|lore":"Scry vrch encounter decku (vyčerpaním) — poznáš budúcnosť a plánuješ engage/quest. K tomu obrana 3.",
+  "beravor|lore":"Motor kariet — raz za kolo dotiahne 2 karty (vyčerpaním). Jeden z najlepších „splash“ hrdinov do akéhokoľvek decku.",
+  "glorfindel|lore":"Prémiové staty (vôľa aj útok). V Lore verzii platíš 1 threat za self-heal — s Light of Valinor/Asfaloth to vyrieši a máš takmer dokonalého hrdinu.",
+  // --- Základná krabica: kľúčové hráčske karty ---
+  "a test of will":"Najdôležitejšia karta v hre — za 1 zruší when-revealed treachery (aj Doomed/Surge). Auto-include v každom Spirit decku, hraj 3×.",
+  "hasty stroke":"Zruší shadow efekt — záchrana pri obrane proti nebezpečným shadow kartám. Situačné, ale v ťažkých combat questoch nenahraditeľné.",
+  "sneak attack":"Vloží spojenca zadarmo na jednu fázu a vráti ho do ruky. S Gandalfom legendárne combo (úder / −threat / draw). Extrémne flexibilné tempo.",
+  "gandalf|neutral":"Najlepší spojenec v hre — 4/4/4, pri vstupe draw 3 / −5 threat / 4 poškodenie. Ideálny cez Sneak Attack. Patrí skoro do každého decku.",
+  "steward of gondor":"Najlepšia resource acceleration — +2 zdroje za kolo sfére, na ktorej hrdinovi leží. Rozbehne drahé aj cross-sphere karty. Absolútny staple.",
+  "unexpected courage":"Readuje ľubovoľného hrdinu každé kolo — akčná výhoda č. 1. V sóle zlato (obranca bráni 2×, quester questuje aj bojuje).",
+  "northern tracker":"Kráľ location control — každé kolo dá 1 postup na každú lokáciu v hre (staging aj aktívnu). K tomu 3 telo. Staple do location-heavy questov.",
+  "faramir|leadership":"Počas questu dá +1 vôle každej questujúcej postave — pri veľa spojencoch obrovský plošný buff. Top questovací spojenec.",
+  "henamarth riversong":"Za 1 vidíš vrch encounter decku — perfektná kontrola staging fázy v sóle. Lacný, opakovaný scry.",
+  "feint":"Zruší útok jedného nepriateľa v tomto kole — kúpi čas proti bossovi alebo keď nemáš obrancu. Vynikajúce combat tempo.",
+  "forest snare":"Trvalo zamkne nepriateľa (nemôže útočiť) — deaktivuje bossa (napr. Hill Troll na Anduine). Klasická odpoveď na veľkých.",
+  "gleowine":"1 karta draw za kolo (vyčerpaním) — spoľahlivý, splashovateľný motor kariet do každého decku.",
+  "daughter of the nimrodel":"Vylieči 2 HP za kolo — najlacnejší opakovaný healing. Kľúč proti Archery a direct damage.",
+  "self preservation":"Vylieči 2 HP z pripojenej postavy za akciu — udrží nažive obrancu či Gimliho.",
+  "miner of the iron hills":"Odstráni condition doplnok z postavy — jediná lacná odpoveď na nebezpečné condition treachery.",
+  "the galadhrim's greeting":"−4 threat (a v combo s Elrond's Counsel až −6) — chrbtica threat kontroly v Spirit.",
+  "secret paths":"Zvolená lokácia v staging nemá počas questu silu hrozby — pomáha prekonať ťažké questovacie kolá a location-heavy sety.",
+  "dwarven tomb":"Vráti Spirit event z discardu (napr. A Test of Will) — vďaka recursion stačia eventy 2×.",
+  "will of the west":"Zamieša discard späť do balíčka — recyklácia kľúčových kariet a poistka proti dlhým hrám/millu.",
+  "blade of gondolin":"Lacná zbraň: +1 útok a +1 postup pri zabití Orka — skorá agresia aj questový bonus.",
+  "citadel plate":"+4 HP na postavu — spraví z obrancu/Gimliho tank, ktorý ustojí aj veľké údery.",
+  "horn of gondor":"Vráti 1 zdroj vždy, keď spojenec odíde z hry — palivo pre chump-blocking a Sneak Attack decky.",
+  "stand and fight":"Vráti spojenca (aj mocného) z discardu do hry za jeho cenu — hodnota po discard efektoch a na drahých spojencov.",
+  "radagast's staff":"Zlacní/zadarmo hráš Creature spojencov (vtáky, medvede) — motor pre Eagle/Creature decky.",
+  "lore of imladris":"Vylieči 4 HP jednej postave — silné jednorazové liečenie po veľkom údere.",
+  "snowbourn scout":"1-cost quester, čo pri vstupe dá 1 postup na lokáciu — lacný chump aj location help.",
+  "lorien's wealth":"Draw 3 za 2 (Lore) — jednorazový card advantage do Lore deckov.",
+  "we are not idle":"Zdroje podľa počtu trpaslíkov v hre — skorý ramp do dwarf deckov.",
+  "common cause":"Presunie zdroj medzi hrdinami — vyhladzuje cross-sphere ekonomiku a umožní drahé hry.",
+
+  // --- Shadows of Mirkwood cyklus ---
+  "fast hitch":"Readuje hobbita (druhá akcia v kole) — akčná výhoda; s viacerými hobbitmi reťazíš questing aj boj. Jadro hobbit deckov.",
+  "rumour from the earth":"Flexibilný scry — pozri a usporiadaj vrch encounter decku alebo lokáciu. Skvelá kontrola staging fázy.",
+  "grim resolve":"Priprav (ready) všetky svoje postavy — obrovský reset tempa v kritickom kole. Drahé, ale zlomové.",
+  "the riddermark's finest":"Rohan Spirit spojenec so slušnou vôľou aj útokom — dobrý všestranný quester do Rohan/Spirit deckov.",
+  "winged guardian":"Odolný Eagle obranca, čo sa po obrane vracia do ruky (nie do discardu) — opakovaná lacná obrana v Eagle deckoch.",
+  "landroval":"Eagle, ktorý vie postaviť zabitého hrdinu späť do hry — poistka proti prehre; drahý, ale mocný.",
+  "west road traveller":"Spojenec s location control (postup na aktívnu lokáciu) — pomáha proti location-heavy questom.",
+  "ancient mathom":"Draw 3 (Lore) po prieskume lokácie — dobrý card advantage do location deckov.",
+  "radagast":"Podpora Creature/Eagle — lieči a readuje zvieratá; jadro Creature deckov (s Radagast's Staff).",
+  "eagles of the misty mountains":"Eagle swarm engine — zlacňuje ďalších orlov; základ Eagle decku.",
+  "descendant of thorondor":"Eagle, čo pri vstupe dá 2 priame poškodenie nepriateľovi — burst na skoré hrozby.",
+  "great yew bow":"Ranged zbraň — umožní útočiť naprieč stolom; v sóle menej, v multiplayeri cenná.",
+
+  // --- Khazad-dûm & Dwarrowdelf cyklus ---
+  "dain ironfoot|leadership":"Trpasličí kráľ — kým je pripravený, každý iný Dwarf má +1 útok a +1 vôle. Motor celého dwarf swarmu; drž ho readied.",
+  "a burning brand":"Zruší shadow efekty na obrancovi — jeden z najlepších obranných doplnkov; robí obranu bezpečnou.",
+  "warden of healing":"Opakované liečenie 2 HP (aj cez stôl) za akciu — najlepší healing spojenec v hre. Do skoro každého Lore decku.",
+  "zigil miner":"Motor kariet/zdrojov cez discard z vrchu balíčka — jadro Noldor/dwarf mining archetypu (s Imladris Stargazer).",
+  "imladris stargazer":"Usporiada vrch tvojho balíčka — obrovská hodnota s top-deck efektmi (Vilya) a konzistencia draw.",
+  "master of the forge":"Tutor doplnkov — vyhľadá kľúčový attachment. Jadro attachment-heavy deckov (Vilya, Trap).",
+  "erebor hammersmith":"Vráti doplnok z discardu — recursion pre attachment decky; s Master of the Forge motor.",
+  "vilya":"Legendárny motor: vyčerpaj Elronda a zahraj kartu z vrchu balíčka zadarmo. Postav deck okolo neho (draw + Imladris Stargazer) — jeden z najsilnejších enginov v poole.",
+  "light of valinor":"Glorfindel questuje bez vyčerpania — akčná výhoda a enabler self-healu. Auto-include s Glorfindelom.",
+  "asfaloth":"Glorfindel dá 2 postup na lokácie (staging aj aktívnu) — špičkový lacný location control.",
+  "daeron's runes":"Draw 2, discard 1 za 0 zdrojov — najlepší cantrip v hre; stabilizuje ruku a kŕmi Noldor discard.",
+  "hail of stones":"Priame poškodenie nepriateľovi po úspešnom queste (Tactics) — burst na oslabenie či dobitie.",
+  "narvi's belt":"Dá hrdinovi ikonu všetkých sfér (resource smoothing) — umožní cross-sphere hry v mono-dwarf ekonomike.",
+  "legacy of durin":"Trpasličí motor kariet — pri dostatku trpaslíkov ťahá karty navyše každé kolo.",
+
+  // --- Heirs of Númenor & Against the Shadow cyklus ---
+  "boromir|tactics":"Ready-by-threat útočný motor — zvýšením threatu sa readuje a keď je zranený, dáva +1 útok každému spojencovi. Jadro Gondor/boj aggro.",
+  "boromir|leadership":"Zvýšením threatu sa readuje a podporuje spojencov — silný s Visionary Leadership a threat kontrolou v Gondor decku.",
+  "beregond|tactics":"Najlepší sólo obranca — 4 obrana a s Gondorian Shield/Behind Strong Walls prakticky nezničiteľný. Chrbtica combat deckov.",
+  "hirluin the fair|leadership":"Motor Outlands — umožní zahrať Outlands spojencov ľubovoľnej sféry. Jadro Outlands swarmu.",
+  "damrod|leadership":"Ekonomika pre pasce a Rangerov — zdroje z odhalených nepriateľov a lacnejšie traps. Jadro Trap decku.",
+  "mablung|leadership":"Zdroje za engagement/odchod nepriateľa — palivo pre Ranger/Trap a combat decky.",
+  "gondorian shield":"+2 obrana na Gondor/Warrior — spraví z Beregonda tank. Staple do obrany.",
+  "behind strong walls":"Priprav Gondor obrancu a daj mu +2 obrana — dvojitá obrana v jednom kole. Combat trik.",
+  "visionary leadership":"+1 vôle každému Gondor spojencovi — plošný questový buff do Gondor swarmu.",
+  "for gondor!":"+1 útok a +1 vôle Gondor postavám v kole — finisher či quest push do Gondor decku.",
+  "ethir swordsman":"Outlands spojenec — v swarme každý ďalší Outlands zvyšuje silu; s Hirluinom exponenciálny rast.",
+  "gondorian spearman":"Chump blocker, čo pri zničení vráti 1 poškodenie útočníkovi — hodnota v obrane.",
+  "defender of rammas":"Lacný odolný obranca (veľa HP) — ideálny wall/chump do Gondor obrany.",
+  "herald of anorien":"Zlacní Gondor spojencov — musteringový motor pre swarm.",
+  "envoy of pelargir":"Lacný spojenec, čo dá zdroj inému hrdinovi — vyhladzuje ekonomiku Gondor decku.",
+  "errand-rider":"Presunie zdroj medzi hrdinami — fixuje cross-sphere ekonomiku (napr. kŕmi Steward of Gondor).",
+  "ranger spikes":"Pasca — pripne sa na nepriateľa a znemožní mu útok/engage; lacná kontrola boja (s Damrodom).",
+  "poisoned stakes":"Pasca s opakovaným poškodením zajatého nepriateľa — pomaly ho zabíja; combo do trap decku.",
+  "ithilien pit":"Pasca — oslabí nepriateľa (−útok/−obrana), aby sa ľahšie zabil. Ranger/Trap kontrola.",
+  "mithrandir's advice":"Draw 2 (Lore) — solídny card advantage do Lore/Gondor decku.",
+  "a good harvest":"Zmení sféru zdroja — umožní zaplatiť cross-sphere kartu; ekonomický smoothing.",
+  "palantir":"Scry a manipuluj vrch encounter decku (pozor na threat) — silná kontrola informácií.",
+  "timely aid":"Za nízky threat (Secrecy) lacno postaví mocného spojenca — skvelý tempo štart.",
+  "reinforcements":"Postaví spojencov naraz (Gondor) — musteringový burst do swarmu.",
+
+  // --- Sága (Pán prsteňov) ---
+  "frodo baggins|spirit":"Vie brániť tak, že poškodenie berie ako threat namiesto HP — núdzová obrana, ktorá ťa udrží v hre. Hobbit quester.",
+  "merry|spirit":"Hobbit — pri engage-nutí nepriateľa zníži threat; podpora hobbit/secrecy decku.",
+  "treebeard|lore":"Mohutný Ent — výborný útok aj obrana, ale pomalý (vyčerpáva sa a treba ho readovať). Anchor questu/obrany v saga deckoch.",
+  "gandalf|lore":"Silný Lore hrdina so špičkovými statmi, ale vysoký štartový threat — manažuj ho (Wizard Pipe, threat down). Motor draw a tempa.",
+  "dagger of westernesse":"Hobbití nôž — +1 útok a proti engaged nepriateľovi ešte viac; robí z hobbitov reálnych útočníkov.",
+  "hobbit cloak":"+1 obrana a +2 HP hobbitovi — spraví z Frodo/Sama prekvapivo dobrého obrancu.",
+  "sting":"Hobbití meč — lacný útok pre Bilba/Frodo/Sama; s Daggerom robí z hobbitov nebezpečné postavy.",
+  "elf-stone":"Zahráš spojenca zadarmo (aj drahého/Outlands) — tempo a mustering trik.",
+  "rosie cotton":"Hobbití spojenec — readuje či lieči hobbita; lepidlo hobbit decku."
+};
+function getAnalysis(c){ if(!c) return null;
+  return ANALYSIS[norm(c.name)+"|"+(c.sphere_code||"")] || ANALYSIS[norm(c.name)] || null;
+}
+
+/* Official/known Czech card names (EN→CZ). Seeded reliably; doplní sa z tvojho zoznamu. */
+const CZ_NAMES = {
+  // Hrdinovia (Základná krabica)
+  "aragorn":"Aragorn","theodred":"Théodred","gloin":"Glóin","gimli":"Gimli",
+  "legolas":"Legolas","thalin":"Thalin","eowyn":"Éowyn","eleanor":"Eleanor",
+  "dunhere":"Dúnhere","denethor":"Denethor","glorfindel":"Glorfindel","beravor":"Beravor",
+  // Spojenci
+  "gandalf":"Gandalf","faramir":"Faramir","guardian of the citadel":"Strážce Citadely",
+  "longbeard orc slayer":"Dlouhovous Skřetobijec","silverlode archer":"Lučištník od Stříberky",
+  "snowbourn scout":"Zvěd od Sněžné","son of arnor":"Syn Arnoru","lorien guide":"Průvodce z Lórienu",
+  "northern tracker":"Stopař ze Severu","wandering took":"Tulák Bral","gleowine":"Gléowine",
+  "henamarth riversong":"Henamarth Píseň řeky","daughter of the nimrodel":"Dcera Nimrodel",
+  "erebor hammersmith":"Ereborský kovář","miner of the iron hills":"Kovkop ze Železných hor",
+  "gondorian spearman":"Gondorský kopiník","veteran axehand":"Zkušený sekerník",
+  // Udalosti
+  "sneak attack":"Zákeřný útok","a test of will":"Zkouška vůle","stand and fight":"Stát a bojovat",
+  "dwarven tomb":"Trpasličí hrobka","the galadhrim's greeting":"Uvítání Galadhrim",
+  "radagast's cunning":"Radagastova mazanost","secret paths":"Tajné stezky","blade mastery":"Mistr meče",
+  "feint":"Paráda","quick strike":"Rychlý úder",
+  // Doplnky
+  "celebrian's stone":"Celebríanin kámen","steward of gondor":"Správce Gondoru",
+  "unexpected courage":"Nečekaná odvaha","forest snare":"Lesní léčka","protector of lorien":"Ochránce Lórienu",
+  "horn of gondor":"Gondorský roh","blade of gondolin":"Čepel z Gondolinu",
+  // Sága a ďalšie (spoľahlivé/Tolkien CZ)
+  "frodo baggins":"Frodo Pytlík","treebeard":"Stromovous","elf-stone":"Elessar",
+  "booming ent":"Dunící ent","bow of the galadhrim":"Luk Galadhrim","eomer":"Éomer",
+  "gwaihir":"Gwaihir","mablung":"Mablung","damrod":"Damrod","boromir":"Boromir"
+};
+function czName(c){ return c?(CZ_NAMES[norm(c.name)]||null):null; }
+
+/* Orientačný slovníček pojmov (EN → CZ). Kľúčové slová podľa českého vydania/pravidiel. */
+const GLOSSARY=[
+  ["Ranged","Střelec — může útočit na nepřítele ve střetu s jiným hráčem"],
+  ["Sentinel","Stráž — může bránit útok mířený na jiného hráče"],
+  ["Restricted","Omezení — max. 2 takové doplňky na postavu"],
+  ["Archery X","Lukostřelba X — rozděl X poškození mezi své postavy"],
+  ["Surge","Nápor — odhal 1 kartu setkání navíc"],
+  ["Doomed X","Zatracení X — každý hráč si zvýší ohrožení o X"],
+  ["Secrecy","Utajení — sleva na karty při nízkém ohrožení"],
+  ["Valour","Udatnost — bonusy při vysokém ohrožení"],
+  ["Willpower","Síla vůle (vůle)"],
+  ["Attack / Defense","Útok / Obrana"],
+  ["Hit Points","Životy"],
+  ["Threat","Ohrožení"],
+  ["Staging area","Oblast odhalení"],
+  ["Shadow card","Karta stínu"],
+  ["Questing / commit","Plnění úkolu / vyslat na úkol"],
+  ["Side quest","Vedlejší úkol"],
+  ["Ready / Exhaust","Připravit / Vyčerpat"],
+  ["Engagement","Střetnutí"],
+  ["Hero / Ally","Hrdina / Spojenec"],
+  ["Attachment / Event","Doplněk / Událost"],
+  ["Location","Lokace"],
+  ["Dwarf / Eagle","Trpaslík / Orel"],
+  ["Creature / Warrior","Bytost (staršie Stvůra) / Válečník"],
+  ["Ranger / Hobbit / Noble","Hraničář / Hobit / Vznešený"]
+];
+
+function renderAnalysis(){
+  setCrumbs(`<a onclick="go('home')">Domov</a> › Analýza kariet`);
+  if(!CARDS.loaded){
+    view.innerHTML=`<div class="empty" style="margin-top:22px"><b>Najprv načítaj databázu kariet</b>
+      Klikni hore na zlaté tlačidlo „Nahrať databázu kariet“ a potom sem znova vojdi.</div>`;
+    return;
+  }
+  const cycles=[
+    {title:"Základná krabica", packs:["Core Set"]},
+    {title:"Shadows of Mirkwood — cyklus", packs:["The Hunt for Gollum","Conflict at the Carrock","A Journey to Rhosgobel","The Hills of Emyn Muil","The Dead Marshes","Return to Mirkwood"]},
+    {title:"Khazad-dûm & Dwarrowdelf", packs:["Khazad-dûm","The Redhorn Gate","Road to Rivendell","The Watcher in the Water","The Long Dark","Foundations of Stone","Shadow and Flame"]},
+    {title:"Heirs of Númenor & Against the Shadow", packs:["Heirs of Númenor","The Steward's Fear","The Druadan Forest","Encounter at Amon Dîn","Assault on Osgiliath","The Blood of Gondor","The Morgul Vale"]},
+    {title:"Sága (Pán prsteňov)", packs:["The Black Riders","The Road Darkens","The Treason of Saruman","The Land of Shadow","The Flame of the West","The Mountain of Fire"]}
+  ];
+  const byPack={};
+  for(const code in CARDS.byCode){
+    const c=CARDS.byCode[code];
+    if(!PLAYER_TYPES.has(c.type_code)) continue;
+    const pn=norm(c.pack_name);
+    (byPack[pn]=byPack[pn]||[]).push(c);
+  }
+  const to={hero:0,ally:1,attachment:2,event:3,"player-side-quest":4,treasure:5};
+  let html=`<section class="section" style="margin-top:10px">
+    <div class="head scenario"><h2>Analýza kariet</h2><span class="meta">Hráčske karty podľa setov · ★ = má rozšírenú analýzu</span></div>
+    <div class="guide-intro">Rozbaľ set a klepni na kartu — otvorí sa jej analýza (staty, traity a esenciálne zhrnutie). Analýzu dopĺňam postupne po setoch; teraz je hotová <b>Základná krabica</b>.</div>
+    <details class="aset" style="margin-bottom:14px"><summary>📖 Slovníček pojmov (EN → CZ)<span class="cnt">${GLOSSARY.length}</span></summary>
+      <div style="padding:6px 14px 14px">${GLOSSARY.map(g=>`<div class="kw"><b>${esc(g[0])}</b> — <span>${esc(g[1])}</span></div>`).join("")}</div>
+    </details>`;
+  for(const cyc of cycles){
+    let inner="";
+    for(const pack of cyc.packs){
+      const list=(byPack[norm(pack)]||[]).slice().sort((a,b)=>
+        (to[a.type_code]-to[b.type_code]) ||
+        (a.sphere_code||"").localeCompare(b.sphere_code||"") ||
+        ((a.position||0)-(b.position||0)));
+      if(!list.length) continue;
+      const noted=list.filter(getAnalysis).length;
+      inner+=`<details class="aset"><summary>${esc(pack)}<span class="cnt">${list.length} kariet${noted?` · ${noted} ★`:""}</span></summary>
+        <div class="agrid">`;
+      for(const c of list){
+        inner+=`<div class="acard ${getAnalysis(c)?"note":""}" onclick="openCard('${c.code}')">
+          <div class="imgwrap"><img loading="lazy" src="${cardImg(c)}" alt="${esc(c.name)}" onerror="this.parentNode.classList.add('noimg')"></div></div>`;
+      }
+      inner+=`</div></details>`;
+    }
+    if(inner) html+=`<div class="acyc"><h3>${esc(cyc.title)}</h3>${inner}</div>`;
+  }
+  html+=`</section>`;
+  view.innerHTML=html; window.scrollTo(0,0);
+}
+
+function statPill(l,v){ return (v!==undefined&&v!==null&&v!=="")?`<span class="pill">${l} ${v}</span>`:""; }
+function openCard(code){
+  const c=CARDS.byCode[code]; if(!c) return;
+  const m=document.getElementById("cardmodal");
+  const sph=SPHERE_COLORS[c.sphere_code]||"--neutral";
+  let stats=`<span class="pill" style="border-color:var(${sph});color:var(${sph})">${esc(c.sphere_name||c.sphere_code||"")}</span>`+
+            `<span class="pill">${esc(c.type_name||c.type_code||"")}</span>`;
+  if(c.type_code==="hero"){ stats+=statPill("Threat",c.threat)+statPill("Vôľa",c.willpower)+statPill("Útok",c.attack)+statPill("Obrana",c.defense)+statPill("HP",c.health); }
+  else{
+    stats+=statPill("Cena",c.cost);
+    if(c.type_code==="ally") stats+=statPill("Vôľa",c.willpower)+statPill("Útok",c.attack)+statPill("Obrana",c.defense)+statPill("HP",c.health);
+  }
+  if(c.is_unique) stats+=`<span class="pill" style="border-color:var(--gold);color:var(--gold-bright)">unikát</span>`;
+  const note=getAnalysis(c);
+  m.querySelector(".modal-inner").innerHTML=`
+    <button class="modal-x" onclick="closeCard()">✕</button>
+    <div class="modal-grid">
+      <img class="modal-img" src="${cardImg(c)}" alt="${esc(c.name)}" onerror="this.style.display='none'">
+      <div class="modal-info">
+        <h3>${esc(c.name)}</h3>
+        ${czName(c)?`<div class="czname">🇨🇿 ${esc(czName(c))}</div>`:""}
+        <div class="mstats">${stats}</div>
+        ${c.traits?`<div class="mtraits">${esc(c.traits)}</div>`:""}
+        <div class="manalysis"><h4>Analýza</h4>
+          ${note?`<p>${esc(note)}</p>`:`<p class="none">Túto kartu ešte nemám rozobratú — detailné rozbory nájdeš na Vision of the Palantir alebo Hall of Beorn. (Analýzu dopĺňam po setoch.)</p>`}
+          ${c.url?`<a href="${esc(c.url)}" target="_blank" rel="noopener">Otvoriť na RingsDB ↗</a>`:""}
+        </div>
+      </div>
+    </div>`;
+  m.classList.add("open"); document.body.style.overflow="hidden";
+}
+function closeCard(){ const m=document.getElementById("cardmodal"); if(m){ m.classList.remove("open"); document.body.style.overflow=""; } }
+
+function renderGuide(){
+  setCrumbs(`<a onclick="go('home')">Domov</a> › Ako stavať decky`);
+  const html=`<section class="section" style="margin-top:10px">
+    <div class="head scenario"><h2>Ako stavať decky</h2><span class="meta">Sprievodca · odporúčania skúsených hráčov</span></div>
+    <div class="guide">
+    <div class="guide-intro">Praktický rámec, ako sa naučiť skladať vlastné decky — zosumarizované z Vision of the Palantir, Hall of Beorn, Tales from the Cards a RingsDB. Klepni na sekciu pre rozbalenie.</div>
+
+    <details class="gsec" open><summary><span class="gnum">1</span>Úvod &amp; správny prístup k učeniu</summary><div class="gbody">
+      <p>Skladanie deckov je remeslo, ktoré sa brúsi <b>desiatkami deckov a stovkami hier</b> — aj veteráni sa stále učia. Paradoxne, <b>čím väčší pool, tým ťažšie</b> (paralýza z výberu). Riešením nie je poznať každú kartu, ale mať opakovateľný postup a vedome si zúžiť priestor.</p>
+      <ul>
+        <li><b>Najviac ťa naučí hranie a rozbor prehier.</b> Po prehre sa pýtaj <em>ktorá</em> vec zlyhala, nie len „prehral som“.</li>
+        <li><b>Kopírovať decky je v poriadku.</b> Vezmi hotový deck z RingsDB (filtrovaný na tvoj pool), zahraj ho, rozober prečo funguje, až potom uprav.</li>
+        <li><b>Progression = riadené učenie.</b> Staviu len z kariet po daný balík (máš to v appke aj s filtrom poolu) — malý pool, jasne vidíš prínos každej karty.</li>
+        <li><b>Veď si poznámky</b> — krátky „post‑mortem“ po každej prehre.</li>
+      </ul>
+    </div></details>
+
+    <details class="gsec"><summary><span class="gnum">2</span>Postup stavby v 6 krokoch</summary><div class="gbody">
+      <ol class="steps">
+        <li><b>Koncept.</b> Čo má deck robiť? Sféra, trait/mechanika, ktorý scenár chcem poraziť, aká bude slabina.</li>
+        <li><b>Hrdinovia (základ).</b> 3 hrdinovia. V solo musia pokryť <b>questing, obranu aj útok</b>; radšej rozmanité staty (poistka, keď jeden padne). Štartový threat ~<b>26–32</b>. Splash hrdina do 3. slotu na zdroje/karty.</li>
+        <li><b>Karty (telo).</b> Pýtaj sa, akú <em>dieru</em> karta plní. Spojenci: <b>obrancovia pred útočníkmi</b> + utility (draw, healing, tutor). Udalosti: konzistencia a odpovede (často stačia 2×). Doplnky: vylepšujú hrdinov + readying. Vedľajšie úlohy: max ~2.</li>
+        <li><b>Krivka.</b> Väčšina kariet <b>0–1–2 zdroje</b>. Hra trvá ~10 kôl → bez draw uvidíš len ~16 kariet, preto potrebuješ <b>card draw/tutor</b>.</li>
+        <li><b>Orez na 50.</b> 50 = optimum. Rež duplicitné riešenia a 3. kópie unique kariet. Posledných 5 daj do sideboardu (vymeníš podľa scenára).</li>
+        <li><b>Test &amp; iterácia.</b> Skúšaj proti rôznym scenárom. Zlyhanie = dáta → uprav a opakuj.</li>
+      </ol>
+    </div></details>
+
+    <details class="gsec"><summary><span class="gnum">3</span>Stavba podľa scenára — aby deck vedel reagovať</summary><div class="gbody">
+      <h4>4 úlohy, ktoré solo deck musí zvládnuť</h4>
+      <ul>
+        <li><b>Questing</b> — viac vôle než hrozby v staging.</li>
+        <li><b>Obrana</b> — prežiť útoky (obranca + HP/healing/chump).</li>
+        <li><b>Útok</b> — zabíjať nepriateľov, nech sa nehromadia.</li>
+        <li><b>Engine</b> — draw + zdroje, aby si sa dostal <em>pred</em> encounter deck.</li>
+      </ul>
+      <p>Keď niektorú z týchto 4 nezvládaš, presne tam prehráš — a to hľadaj v post‑morteme.</p>
+      <h4>Čítanie encounter decku</h4>
+      <ul>
+        <li><b>Nepriatelia:</b> veľkí bossovia (silný obranca + burst) vs swarm (plošné zabíjanie/chump).</li>
+        <li><b>Lokácie vs boj:</b> veľa lokácií → location control; veľa boja → obrana + útok.</li>
+        <li><b>Kľúčové slová:</b> Archery → HP/healing; Surge → menej vlastného draw, viac scrying; Doomed → threat reduction; Battle/Siege → questuješ útokom/obranou.</li>
+        <li><b>Enemy archetypy:</b> Dunland trestá veľkosť ruky, Corsair kradne zdroje, Easterling lepí attachmenty… poznaj „povahu“ setu a vezmi tech.</li>
+      </ul>
+      <h4>Toolbox + sideboard</h4>
+      <p>Maj stabilné <b>jadro</b> (motor + 4 úlohy) a vymeniteľnú <b>tech vrstvu</b> podľa questu. Konkrétne karty z tvojho poolu nájdeš v sekcii 6.</p>
+    </div></details>
+
+    <details class="gsec"><summary><span class="gnum">4</span>Ako rozpoznať silu karty</summary><div class="gbody">
+      <p class="lead">Pýtaj sa: „akú ÚLOHU karta plní a ako efektívne?“</p>
+      <div class="cheat">
+        <div class="c"><b>Efektivita</b><span>Koľko vôle/útoku/HP dostaneš za 1 zdroj. Lacné + silné = staple.</span></div>
+        <div class="c"><b>Flexibilita</b><span>Robí viac vecí / sedí do väčšiny deckov (Steward of Gondor, A Test of Will, Unexpected Courage).</span></div>
+        <div class="c"><b>Card advantage</b><span>Karta, čo ti dotiahne kartu alebo dá viac hodnoty, než stojí (Gléowine, Daeron's Runes).</span></div>
+        <div class="c"><b>Tempo</b><span>Zdroje a mustering ťa dostanú pred encounter deck (Steward, Sneak Attack).</span></div>
+        <div class="c"><b>Akčná výhoda</b><span>Readying (Unexpected Courage, Fast Hitch) — jedna postava robí dve veci. V solo zlato.</span></div>
+        <div class="c"><b>Answer &gt; win‑more</b><span>Do jadra patria stabilizačné karty (cancel, healing, threat down), nie „vyhrám‑viac“ karty.</span></div>
+      </div>
+      <p><b>Barometer:</b> RingsDB „most used cards“ a séria <em>Staples</em> na Vision of the Palantir ukazujú, čo skúsení reálne hrajú.</p>
+    </div></details>
+
+    <details class="gsec"><summary><span class="gnum">5</span>Ako rozpoznať synergiu</summary><div class="gbody">
+      <p>Dva druhy: okolo <b>traitu</b> a okolo <b>mechaniky (motor)</b>. Na karte sa pýtaj: <em>„čoho sa dotýka?“</em> — traitu, keywordu, typu karty, alebo zóny (ruka/discard/vrch/staging).</p>
+      <div class="cheat">
+        <div class="c"><b>Trait synergia</b><span>Text spomína trait: „each Dwarf/Outlands/Gondor…“. Dwarves swarm, Outlands (Ethir Swordsman +1 každému), Gondor, Rohan, Noldor, Silvan, Hobbits.</span></div>
+        <div class="c"><b>Motory (engines)</b><span>Karta A zlacňuje/opakuje kartu B: Elrond+Vilya, Damrod+pasce, Hirluin+Outlands, Arwen+Noldor discard, Sneak Attack+Gandalf.</span></div>
+        <div class="c"><b>Keyword synergia</b><span>Ranged/Sentinel (cez stôl), Secrecy (nízky threat → zľavy), Valour (vysoký threat → bonusy), Doomed.</span></div>
+        <div class="c"><b>Pravidlo</b><span>Hľadaj 2–3 kartové motory s opakovanou výhodou a postav deck tak, aby si ich spoľahlivo NAŠIEL (tutor/draw + 3 kópie).</span></div>
+      </div>
+    </div></details>
+
+    <details class="gsec"><summary><span class="gnum">6</span>Answer / tech karty z tvojho poolu</summary><div class="gbody">
+      <p>Lekárnička na ladenie deckov podľa hrozby. Všetko je z tvojich krabíc (v zátvorke balík pôvodu).</p>
+      <div class="tech"><b>Zrušiť treachery</b> · <span class="cards">A Test of Will <i>(Core)</i></span></div>
+      <div class="tech"><b>Zrušiť shadow kartu</b> · <span class="cards">Hasty Stroke <i>(Core)</i></span></div>
+      <div class="tech"><b>Location control</b> · <span class="cards">Northern Tracker <i>(Core)</i>, Asfaloth <i>(Foundations of Stone)</i>, Secret Paths <i>(Core)</i>, Snowbourn Scout <i>(Core)</i>, West Road Traveller <i>(Return to Mirkwood)</i></span></div>
+      <div class="tech"><b>Threat reduction</b> · <span class="cards">The Galadhrim's Greeting <i>(Core)</i>, Elrond's Counsel <i>(Watcher in the Water)</i>, Gandalf <i>(Core)</i>, Aragorn (Lore) <i>(Watcher in the Water)</i></span></div>
+      <div class="tech"><b>Healing</b> · <span class="cards">Warden of Healing <i>(The Long Dark)</i>, Daughter of the Nimrodel <i>(Core)</i>, Lore of Imladris <i>(Core)</i>, Self Preservation <i>(Core)</i>, hrdina Elrond <i>(Core)</i></span></div>
+      <div class="tech"><b>Odstránenie condition</b> · <span class="cards">Miner of the Iron Hills <i>(Core)</i>, Dwarven Tomb <i>(Core, recursion)</i></span></div>
+      <div class="tech"><b>Pasce / kontrola boja</b> · <span class="cards">Feint <i>(Core)</i>, Forest Snare <i>(Core)</i>, Ranger Spikes <i>(Heirs of Númenor)</i>, Poisoned Stakes <i>(The Blood of Gondor)</i>, Ithilien Pit <i>(Amon Dîn)</i></span></div>
+      <div class="tech"><b>Scrying (poznaj budúcnosť)</b> · <span class="cards">Henamarth Riversong <i>(Core)</i>, hrdina Denethor <i>(Core)</i>, Palantir <i>(Assault on Osgiliath)</i>, Rumour from the Earth <i>(Return to Mirkwood)</i>, Risk Some Light <i>(Shadow and Flame)</i></span></div>
+      <div class="tech"><b>Zdroje (acceleration)</b> · <span class="cards">Steward of Gondor <i>(Core)</i>, Errand‑rider <i>(Heirs of Númenor)</i>, A Good Harvest <i>(The Steward's Fear)</i>, Bifur <i>(Khazad‑dûm)</i></span></div>
+      <div class="tech"><b>Card draw</b> · <span class="cards">Gléowine <i>(Core)</i>, Daeron's Runes <i>(Foundations of Stone)</i>, Lórien's Wealth <i>(Core)</i>, Ancient Mathom <i>(Rhosgobel)</i>, Mithrandir's Advice <i>(The Steward's Fear)</i>, Legacy of Durin <i>(Khazad‑dûm)</i></span></div>
+      <div class="tech"><b>Readying (akčná výhoda)</b> · <span class="cards">Unexpected Courage <i>(Core)</i>, Fast Hitch <i>(The Dead Marshes)</i>, Miruvor <i>(The Redhorn Gate)</i>, Behind Strong Walls <i>(Heirs of Númenor)</i></span></div>
+      <div class="tech"><b>Tempo / mustering</b> · <span class="cards">Sneak Attack + Gandalf <i>(Core)</i>, Reinforcements <i>(Heirs of Númenor)</i>, Stand and Fight <i>(Core)</i>, Timely Aid <i>(The Redhorn Gate)</i></span></div>
+      <div class="tech"><b>Priame poškodenie</b> · <span class="cards">Gandalf <i>(Core)</i>, Hail of Stones <i>(Foundations of Stone)</i>, hrdina Thalin <i>(Core)</i>, Descendant of Thorondor <i>(Core)</i></span></div>
+    </div></details>
+
+    <details class="gsec"><summary><span class="gnum">7</span>Praktický učebný cyklus</summary><div class="gbody">
+      <ul>
+        <li><b>Jeden nápad na deck</b> — nie „všetko naraz“.</li>
+        <li><b>Obmedz pool</b> — progression alebo mono‑sphere (menej možností = rýchlejšie učenie). Pomôže ti filter „len decky z mojej zbierky“.</li>
+        <li><b>Kopíruj → hraj → uprav</b> — vymeň 3–5 kariet a sleduj rozdiel (A/B).</li>
+        <li><b>Post‑mortem</b> — ktorá zo 4 úloh zlyhala? Aká karta chýbala?</li>
+        <li><b>Meraj</b> — vôľa v 1. kole len z hrdinov, obrana v 1. kole, koľko kariet vidíš do 5. kola, štartový threat.</li>
+        <li><b>Pred ťažkým questom</b> si prečítaj jeho rozbor a priprav 3–5 tech kariet do sideboardu.</li>
+      </ul>
+    </div></details>
+
+    <details class="gsec"><summary><span class="gnum">8</span>Kam sa učiť ďalej</summary><div class="gbody">
+      <ul>
+        <li><b>Vision of the Palantir</b> — Deckbuilding principles, Dear New Player, séria Staples, Archetype Analysis, Enemy Archetypes, rozbory scenárov.</li>
+        <li><b>Hall of Beorn</b> — komentované decky (aj Beorn's Path) + databáza kariet.</li>
+        <li><b>Tales from the Cards</b> — séria Deck Building 101.</li>
+        <li><b>Card Talk</b>, <b>Warden of Arnor</b> (The Line Unbroken) a <b>RingsDB</b> (filter podľa poolu, najhranejšie karty).</li>
+      </ul>
+    </div></details>
+
+    </div></section>`;
+  view.innerHTML=html; window.scrollTo(0,0);
+}
+
+function renderPhases(){
+  setCrumbs(`<a onclick="go('home')">Domov</a> › Fázy kola`);
+  const combatExtra = `
+    <details class="subseq"><summary>Útok nepriateľov (6.4) — kroky</summary><ol>
+      <li>Zvoľ nepriateľa (ktorý ešte neútočil).</li>
+      <li>Akcie hráčov (priprav postavy; Paráda už nezastaví práve prebiehajúci útok).</li>
+      <li>Zvoľ obrancu (vyčerpaj postavu, ktorá bude útoku čeliť).</li>
+      <li>Akcie hráčov (posledná šanca zrušiť kartu tieňa).</li>
+      <li>Odhaľ kartu tieňa a vyhodnoť jej efekt.</li>
+      <li>Akcie hráčov (uprav hodnotu obrany pred vyhodnotením poškodenia).</li>
+      <li>Vyhodnoť poškodenie (ak nebol určený obranca, poškodenie dostane 1 hrdina a jeho obrana sa ignoruje).</li>
+      <li>Akcie hráčov.</li>
+      <li>Koniec útoku — ak sú v strete ďalší nepriatelia, ktorí ešte môžu útočiť, opakuj kroky.</li>
+    </ol></details>
+    <details class="subseq"><summary>Útok hráčov (6.5) — kroky</summary><ol>
+      <li>Označ cieľ útoku a útočníkov.</li>
+      <li>Akcie hráčov (uprav hodnotu sily pred vyhodnotením poškodenia).</li>
+      <li>Vyhodnoť poškodenie (porovnaj silu útoku s obranou nepriateľa a spôsob poškodenie).</li>
+      <li>Koniec útoku — pokračuje ďalší hráč; ak už niet na koho útočiť, prejdi na koniec fázy boja.</li>
+    </ol></details>`;
+  const P=[
+    {n:"0",c:"#9aa0ab",t:"Začiatok kola",en:"",steps:[["note","Môžu sa spustiť niektoré trvalé efekty."]]},
+    {n:"1",c:"var(--gold)",t:"Fáza zdrojov",en:"Resource",steps:[
+      ["","Pridaj 1 zdroj do zásoby každého hrdinu."],
+      ["","Dober 1 kartu."],
+      ["","Akcie hráčov."]]},
+    {n:"2",c:"var(--leadership)",t:"Fáza plánovania",en:"Planning",steps:[
+      ["","Hráči hrajú spojencov a doplnky (všetci súčasne)."],
+      ["note","Akcie hráčov možno vykonať kedykoľvek počas tohto kroku."]]},
+    {n:"3",c:"var(--spirit)",t:"Fáza úlohy",en:"Quest",steps:[
+      ["","Hráči sa rozhodnú, ktorú úlohu budú plniť — hlavnú alebo vedľajšiu."],
+      ["","Akcie hráčov (napr. Zákerný útok / Sneak Attack na Gandalfa)."],
+      ["","Hráči vyšlú postavy plniť úlohu."],
+      ["note","Vyslať postavy na úlohu kedykoľvek inokedy už nie je možné."],
+      ["","Akcie hráčov."],
+      ["","Z balíčka stretnutia sa odhalí 1 karta na hráča."],
+      ["note","Kľúčové slová Nápor a Zatratenie na kartách stretnutia sa vyhodnocujú len vo fáze úlohy."],
+      ["","Akcie hráčov (uprav celkovú vôľu ešte pred vyhodnotením úlohy)."],
+      ["","Vyhodnotenie úlohy — porovnaj vôľu s mierou hrozby; rozdiel je buď postup, alebo zvýšenie ohrozenia."]]},
+    {n:"4",c:"var(--lore)",t:"Fáza putovania",en:"Travel",steps:[
+      ["","Hráči môžu putovať do 1 lokácie (ak práve nie je žiadna lokácia aktívna; treba splniť efekt „Putovanie“)."],
+      ["","Akcie hráčov."]]},
+    {n:"5",c:"#d98a3a",t:"Fáza stretnutia",en:"Encounter",steps:[
+      ["","Každý hráč sa môže stretnúť s 1 nepriateľom (v oblasti odhalenia, umiestni ho pred seba proti svojim postavám)."],
+      ["","Akcie hráčov."],
+      ["","Skúšky stretnutia (počnúc prvým hráčom)."],
+      ["","Akcie hráčov (napr. Rýchly úder)."]]},
+    {n:"6",c:"var(--ember)",t:"Fáza boja",en:"Combat",steps:[
+      ["","Vyhodnoť kľúčové slovo nepriateľov — Lukostreľba X / Archery X."],
+      ["","Prideľ každému nepriateľovi v strete 1 kartu tieňa."],
+      ["note","Karty tieňa sa udeľujú iba v tomto kroku — nikdy inokedy."],
+      ["","Akcie hráčov (napr. Rýchly úder, Paráda, Les kopijí…)."],
+      ["","Útok nepriateľov (6.4) — pozri kroky nižšie."],
+      ["","Útok hráčov (6.5) — pozri kroky nižšie."]],extra:combatExtra},
+    {n:"7",c:"var(--gold-bright)",t:"Fáza obnovenia",en:"Refresh",steps:[
+      ["","Priprav vyčerpané karty."],
+      ["","Zvýš ohrozenie o 1."],
+      ["note","Ak dosiahneš hodnotu 50+, si vyradený z hry."],
+      ["","Odovzdaj žetón prvého hráča."],
+      ["","Akcie hráčov."]]},
+    {n:"8",c:"#9aa0ab",t:"Koniec kola",en:"",steps:[
+      ["note","Môžu sa spustiť niektoré trvalé efekty; zahoď karty s trvaním do konca kola (napr. Gandalf)."]]}
+  ];
+  const KW=[
+    ["Střelec / Ranged","postava môže útočiť na nepriateľa, ktorý je v strete s iným hráčom."],
+    ["Stráž / Sentinel","postava môže byť obrancom proti útoku nepriateľa v strete s iným hráčom."],
+    ["Omezení / Restricted","postava môže mať pripojené najviac 2 doplnky s týmto kľúčovým slovom, inak ich musí odhodiť."],
+    ["Lukostreľba X / Archery X","na začiatku fázy boja rozdeľ podľa vlastnej voľby X poškodenia medzi postavy hráčov."],
+    ["Nápor / Surge","vo fáze úlohy (alebo príprave hry) odhaľ z balíčka stretnutia ešte 1 ďalšiu kartu."],
+    ["Zatratenie X / Doomed X","každý hráč si musí zvýšiť ohrozenie o uvedenú hodnotu X."],
+    ["Trvalý efekt","nevyhnutný efekt, ktorý ovplyvňuje hru neustále, kým je karta v hre (nie je hrubým písmom)."]
+  ];
+  let html=`<section class="section" style="margin-top:10px">
+    <div class="head scenario"><h2>Fázy kola</h2><span class="meta">Priebeh jedného kola · Pán prsteňov LCG</span></div>
+    <div class="phases-intro">Poradie krokov v jednom kole. Takmer po každom kroku nasleduje okno na <em>akcie hráčov</em>. Pri Fáze boja rozbaľ detailné kroky útoku klepnutím.</div>
+    <div class="timeline">`;
+  for(const p of P){
+    html+=`<div class="phase" style="--pc:${p.c}">
+      <div class="num">${p.n}</div>
+      <div class="pcard">
+        <div class="ptitle">${p.t}</div>
+        ${p.en?`<div class="pen">${p.en}</div>`:""}
+        <ul>${p.steps.map(s=>`<li class="${s[0]}">${s[1]}</li>`).join("")}</ul>
+        ${p.extra||""}
+      </div></div>`;
+  }
+  html+=`</div><div class="keywords"><h3>Kľúčové slová</h3>
+    ${KW.map(k=>`<div class="kw"><b>${k[0]}</b> — <span>${k[1]}</span></div>`).join("")}
+    </div></section>`;
+  view.innerHTML=html; window.scrollTo(0,0);
+}
+
+function go(v,a,b){
+  if(v==="home") location.hash="";
+  else if(v==="list") location.hash=`#list/${a}/${b}`;
+  else if(v==="deck") location.hash=`#deck/${a}`;
+  else if(v==="phases") location.hash="#phases";
+  else if(v==="guide") location.hash="#guide";
+  else if(v==="analysis") location.hash="#analysis";
+}
+function renderRoute(){
+  const h=location.hash.replace(/^#/,"");
+  if(h.startsWith("list/")){ const [,g,it]=h.split("/"); CURRENT={view:"list",g,it}; renderList(g,it); }
+  else if(h.startsWith("deck/")){ const [,id]=h.split("/"); CURRENT={view:"deck",id}; renderDeck(+id); }
+  else if(h==="phases"){ CURRENT={view:"phases"}; renderPhases(); }
+  else if(h==="guide"){ CURRENT={view:"guide"}; renderGuide(); }
+  else if(h==="analysis"){ CURRENT={view:"analysis"}; renderAnalysis(); }
+  else { CURRENT={view:"home"}; renderHome(); }
+}
+window.addEventListener("hashchange",renderRoute);
+window.go=go;
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeCard(); });
+
+/* ---------- boot ---------- */
+const reloadBtn=$("#reload");
+function loadedUI(ok){
+  if(ok){ reloadBtn.textContent="Obnoviť databázu kariet"; reloadBtn.classList.remove("gold");
+    setStatus("✓ Databáza kariet je načítaná — vyberaj scenár nižšie. (Uloží sa a funguje aj offline pre už prezreté decky.)"); }
+  else { reloadBtn.textContent="Nahrať databázu kariet"; reloadBtn.classList.add("gold");
+    setStatus("Databázu kariet treba načítať z RingsDB (potrebný internet). Klikni na zlaté tlačidlo.",true); }
+}
+reloadBtn.onclick=async()=>{ try{ setStatus("Obnovujem databázu kariet…"); await loadCards(true);
+  loadedUI(true); renderRoute(); }catch(e){ loadedUI(false); } };
+
+(async function boot(){
+  renderLegend();
+  try{
+    await loadCards(false);
+    loadedUI(true);
+  }catch(e){
+    loadedUI(false);
+  }
+  renderRoute();
+})();
+</script>
+</body>
+</html>
