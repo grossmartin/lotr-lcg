@@ -426,7 +426,9 @@ const OWNED_PACKS = [
   // Lord of the Rings Saga (revised trilogy = these player-card sources)
   "The Black Riders","The Road Darkens","The Treason of Saruman",
   "The Land of Shadow","The Flame of the West","The Mountain of Fire",
-  "The Fellowship of the Ring","The Two Towers","The Return of the King"
+  "The Fellowship of the Ring","The Two Towers","The Return of the King",
+  // Angmar Awakened — novo získané (Lost Realm + prvé dva packy)
+  "The Lost Realm","The Wastes of Eriador","Escape from Mount Gram"
 ];
 
 /* Scenario tree + thematic decks.
@@ -1191,7 +1193,8 @@ function renderAnalysis(){
     {title:"Shadows of Mirkwood — cyklus", packs:["The Hunt for Gollum","Conflict at the Carrock","A Journey to Rhosgobel","The Hills of Emyn Muil","The Dead Marshes","Return to Mirkwood"]},
     {title:"Khazad-dûm & Dwarrowdelf", packs:["Khazad-dûm","The Redhorn Gate","Road to Rivendell","The Watcher in the Water","The Long Dark","Foundations of Stone","Shadow and Flame"]},
     {title:"Heirs of Númenor & Against the Shadow", packs:["Heirs of Númenor","The Steward's Fear","The Druadan Forest","Encounter at Amon Dîn","Assault on Osgiliath","The Blood of Gondor","The Morgul Vale"]},
-    {title:"Sága (Pán prsteňov)", packs:["The Black Riders","The Road Darkens","The Treason of Saruman","The Land of Shadow","The Flame of the West","The Mountain of Fire"]}
+    {title:"Sága (Pán prsteňov)", packs:["The Black Riders","The Road Darkens","The Treason of Saruman","The Land of Shadow","The Flame of the West","The Mountain of Fire"]},
+    {title:"Angmar Awakened (nové karty)", packs:["The Lost Realm","The Wastes of Eriador","Escape from Mount Gram"]}
   ];
   const byPack={};
   for(const code in CARDS.byCode){
