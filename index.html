@@ -202,6 +202,12 @@ img{display:block}
 .modal-img{width:100%;border-radius:10px;border:1px solid var(--line)}
 .modal-info h3{font-family:"Cinzel",serif;color:var(--gold-bright);font-size:22px;margin:0 0 4px;line-height:1.2}
 .czname{color:#8fb4e6;font-size:15px;font-style:italic;margin:0 0 10px}
+.crumbs{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.backbtn{background:var(--ink-3);border:1px solid var(--gold);color:var(--gold-bright);
+  border-radius:8px;padding:7px 14px;font-size:13px;cursor:pointer;font-family:"Cinzel",serif;
+  letter-spacing:.03em;flex:0 0 auto;transition:background .12s}
+.backbtn:hover{background:rgba(201,162,74,.14)}
+.crumbtrail{color:var(--parch-dim);font-size:13.5px}
 .mstats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .mtraits{color:var(--parch-dim);font-style:italic;font-size:14px;margin-bottom:12px}
 .manalysis{border-top:1px solid var(--line);padding-top:12px}
@@ -950,7 +956,10 @@ function setCrumbs(html){
   let c=$("#crumbs");
   if(!c){ c=document.createElement("div"); c.id="crumbs"; c.className="crumbs";
     view.parentNode.insertBefore(c,view); }
-  c.innerHTML=html;
+  if(html){
+    c.innerHTML=`<button class="backbtn" onclick="history.back()" title="Späť na predchádzajúcu stránku">← Späť</button><span class="crumbtrail">${html}</span>`;
+    c.style.display="";
+  } else { c.innerHTML=""; c.style.display="none"; }
 }
 let CURRENT={view:"home"};
 function currentItemKey(){ return CURRENT.view==="list"?(CURRENT.g+"/"+CURRENT.it):null; }
@@ -1065,6 +1074,16 @@ const ANALYSIS = {
   "eagles of the misty mountains":"Eagle swarm engine — zlacňuje ďalších orlov; základ Eagle decku.",
   "descendant of thorondor":"Eagle, čo pri vstupe dá 2 priame poškodenie nepriateľovi — burst na skoré hrozby.",
   "great yew bow":"Ranged zbraň — umožní útočiť naprieč stolom; v sóle menej, v multiplayeri cenná.",
+
+  "escort from edoras":"Rohan Spirit spojenec s 3 vôľou za 2 — obrovský jednorazový quest, no po questovaní odchádza z hry. Ideálny na prekonanie ťažkého questovacieho kola alebo ako lacný „burst“ willpower, a skvelý na obetovanie (s Horn of Gondor vráti zdroj). Do Rohan/Spirit questing deckov.",
+  "meneldor":"Eagle spojenec s Ranged, ktorý sa pri striedaní orlov vie vrátiť do ruky — znovupoužiteľný lietajúci útočník a jadro Eagle tempo motorov (s Eagles of the Misty Mountains). Sám drahší, ale reťazenie orlov ho zlacňuje. Do Eagle deckov.",
+  "silvan refugee":"Lacný Silvan spojenec (1 vôľa), ktorý sa na konci kola vráti do ruky — základný „bounce“ kúsok Silvan archetypu: lacno questuje a spúšťa efekty pri vstupe/odchode. Sám slabý, sila je v opakovanom hraní. Vyžaduje Silvan podporu.",
+  "the favor of the lady":"Spirit doplnok: +1 vôle nositeľovi za 1 — jednoduchý, lacný questový buff na hlavného questera (Éowyn, Glorfindel). Bez efektu navyše, ale efektívny stat za cenu. Do deckov, čo tlačia vôľu.",
+  "rain of arrows":"Tactics event: tvoj útočiaci Ranged hrdina dá 1 poškodenie každému nepriateľovi, s ktorým si v strete — plošné čistenie swarmu. Skvelé proti rojom slabých nepriateľov (goblini, pavúky). Situačné, ale v swarm scenároch silné.",
+  "hands upon the bow":"Tactics event: postava zaútočí na nepriateľa priamo v staging area (snipe) — oslabíš/zabiješ nepriateľa skôr, než sa dostane do stretu. Combo s Dúnhere a s kartami, čo bránia engagementu. Nika, ale proti veľkým v staging cenné.",
+  "expert treasure-hunter":"Lore spojenec, ktorý uľahčuje získanie objektívov a Guarded kariet — cenný v scenároch, kde treba niečo vyzdvihnúť (Hunt for Gollum, Rhosgobel). K tomu rozumné telo. Inak priemerný quester.",
+  "ranger summons":"Leadership event, ktorý vyhľadá spojenca z vrchu balíčka — tutor pre kľúčové telo alebo utility spojenca, čo zvyšuje konzistenciu spojeneckých deckov. Za rozumnú cenu.",
+  "peace, and thought":"Lore event: pripraví (ready) hrdinu a k tomu ti dotiahne kartu — akčná výhoda a malý draw v jednom. Výborné na Beravor (dotiahni a ešte questuj). Lacná utility do Lore deckov.",
 
   // --- Khazad-dûm & Dwarrowdelf cyklus ---
   "dain ironfoot|leadership":"Trpasličí kráľ — kým je pripravený, každý iný Dwarf má +1 útok a +1 vôle. Motor celého dwarf swarmu; drž ho readied.",
@@ -1478,7 +1497,10 @@ function go(v,a,b){
   else if(v==="guide") location.hash="#guide";
   else if(v==="analysis") location.hash="#analysis";
 }
+let prevHash = location.hash;
+const scrollPos = {};
 function renderRoute(){
+  scrollPos[prevHash] = window.scrollY;
   const h=location.hash.replace(/^#/,"");
   if(h.startsWith("list/")){ const [,g,it]=h.split("/"); CURRENT={view:"list",g,it}; renderList(g,it); }
   else if(h.startsWith("deck/")){ const [,id]=h.split("/"); CURRENT={view:"deck",id}; renderDeck(+id); }
@@ -1486,6 +1508,10 @@ function renderRoute(){
   else if(h==="guide"){ CURRENT={view:"guide"}; renderGuide(); }
   else if(h==="analysis"){ CURRENT={view:"analysis"}; renderAnalysis(); }
   else { CURRENT={view:"home"}; renderHome(); }
+  const y = scrollPos[location.hash] || 0;
+  window.scrollTo(0, y);
+  if(y>0){ setTimeout(()=>window.scrollTo(0,y),80); setTimeout(()=>window.scrollTo(0,y),300); }
+  prevHash = location.hash;
 }
 window.addEventListener("hashchange",renderRoute);
 window.go=go;
