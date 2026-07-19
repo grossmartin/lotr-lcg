@@ -375,8 +375,8 @@ footer{text-align:center;color:var(--parch-dim);font-size:12.5px;padding:30px 20
 </style>
 </head>
 <body>
-<header class="mast" onclick="go('home')" role="link" tabindex="0" title="Späť na hlavnú stránku"
-  onkeydown="if(event.key==='Enter'||event.key===' ')go('home')">
+<header class="mast" onclick="refreshApp()" role="link" tabindex="0" title="Klikni pre obnovenie stránky a načítanie najnovšej verzie"
+  onkeydown="if(event.key==='Enter'||event.key===' ')refreshApp()">
   <div class="ring"></div>
   <h1>The Lord of the Rings</h1>
   <div class="sub">The Card Game · Decklist</div>
@@ -1009,48 +1009,48 @@ const TIPS={
  * ================================================================== */
 const ANALYSIS = {
   // --- Základná krabica: hrdinovia ---
-  "aragorn|leadership":"Špičkový všestranný hrdina — solídny vo všetkom, Sentinel a s doplnkom Sword that was Broken vie resetovať threat. Skvelý obranca aj kotva questu.",
-  "theodred|leadership":"Motor zdrojov: vloží zdroj na questujúcu postavu ľubovoľnej sféry. Rozbieha deck, no má len 4 HP — chráň ho (direct damage ho zabíja).",
-  "gloin|leadership":"Za každé utŕžené poškodenie získa zdroj. So spoľahlivým liečením (Warden of Healing) silný ekonomický motor, bez neho rizikový.",
-  "gimli|tactics":"Jeho útok rastie s utŕženým poškodením — s liečením a Citadel Plate vražedný stroj. Výborný sólo útočník.",
-  "legolas|tactics":"Zabitie nepriateľa dá 2 postup na quest — spája boj a questovanie. Patrí do takmer každého Tactics decku.",
-  "thalin|tactics":"Počas questu dá 1 poškodenie každému odhalenému nepriateľovi — ničí swarm a slabé encounter spojence ešte pred vstupom do hry. K tomu slušná vôľa.",
-  "eowyn|spirit":"Najlepšia questovacia hrdinka — 4 vôle a discardom karty pridá +2. Základ Spirit questing deckov.",
-  "dunhere|spirit":"Vie útočiť na nepriateľov priamo v staging area — nika, ale silná proti bossom, ktorých nechceš engage-núť.",
-  "eleanor|spirit":"Raz za kolo (vyčerpaním) zruší when-revealed treachery — cancel priamo z hrdinu. Poistka, kým nemáš A Test of Will.",
-  "denethor|lore":"Scry vrch encounter decku (vyčerpaním) — poznáš budúcnosť a plánuješ engage/quest. K tomu obrana 3.",
-  "beravor|lore":"Motor kariet — raz za kolo dotiahne 2 karty (vyčerpaním). Jeden z najlepších „splash“ hrdinov do akéhokoľvek decku.",
-  "glorfindel|lore":"Prémiové staty (vôľa aj útok). V Lore verzii platíš 1 threat za self-heal — s Light of Valinor/Asfaloth to vyrieši a máš takmer dokonalého hrdinu.",
+  "aragorn|leadership":"Najuniverzálnejší hrdina v hre — statline 2 vôľa / 3 útok / 2 obrana / 5 HP zvládne questovať, útočiť aj brániť, a vďaka Sentinelu môže brániť aj útoky mierené na spoluhráča. Jeho reakcia (za 1 zdroj) resetuje tvoje ohrozenie na štartovú hodnotu, keď ho vyšleš na quest; v kombinácii so Sword that was Broken alebo Celebrían's Stone drží threat trvalo nízko. Chce však zdroj každé kolo a súťaží o doplnky — daj mu Steward of Gondor. Ako splash do Leadership je to kotva takmer každého decku a jeden z najsilnejších hrdinov vôbec.",
+  "theodred|leadership":"Čistý ekonomický motor: keď ktorákoľvek postava úspešne questuje, vloží 1 zdroj do zásoby ľubovoľného hrdinu — aj inej sféry. To je stály +1 zdroj za kolo a zároveň vyhladenie splashov, takže rozbehne pomalé, na zdroje náročné decky. Háčik je jeho krehkosť: 1 útok a len 4 HP z neho robia terč pre encounter direct-damage (Necromancer's Reach) a shadow efekty. Chráň ho a nevyšli ho tam, kde utrpí úder — ak padne, deck stráca motor.",
+  "gloin|leadership":"Za každý bod poškodenia, ktorý utrpí, získa 1 zdroj — premení nepriateľské údery na ekonomiku. So spoľahlivým opakovaným liečením (Warden of Healing, Self Preservation) je z neho zdrojová fontána; bez liečenia je to hazard, lebo ťažiť poškodenie mu skracuje život. Najlepší v trpasličích a Leadership ekonomických deckoch, ktoré ho udržia nad vodou. Sám o sebe slabší než Théodred, ale v správnom motore výborný.",
+  "gimli|tactics":"Jeho útok stúpa o 1 za každý bod poškodenia na ňom (základ 2, teoreticky až k 7) — čím viac schytá, tým je smrteľnejší. Kľúčom je udržať ho nažive pri vysokom poškodení: Citadel Plate (+4 HP), Self Preservation a Warden of Healing z neho spravia takmer nezabiteľný sekací stroj. Nequestuje (0 vôle), takže potrebuje partnera na vôľu. V sólo bojových decoch jeden z najlepších útočníkov.",
+  "legolas|tactics":"Keď zabije nepriateľa, položí 2 žetóny postupu na aktuálny quest — spája boj a questovanie, čo je v sóle vzácne. S 3 útoku a Ranged strieľa aj na nepriateľov spoluhráča a stabilne kosí, čím zároveň tlačí quest dopredu. Daj mu zbraň (Blade of Gondolin, Rivendell Blade) a readying (Unexpected Courage) pre viac zabití za kolo. Patrí do takmer každého Tactics decku.",
+  "thalin|tactics":"Kým questuje, každý nepriateľ pri odhalení dostane 1 poškodenie — to zabíja 1-HP swarm skôr, než vôbec vstúpi do hry, a zjemňuje ťažké encounter kolá. K tomu má slušnú vôľu (1) aj útok (2), takže je aj solídny quester. Výborný proti goblinom a pavúčím rojom (Seventh Level, Passage). Kombinuje sa s efektmi „keď je nepriateľ zničený“ a s direct-damage kartami.",
+  "eowyn|spirit":"Najlepšia questovacia hrdinka v hre: základ 4 vôle a za discard 1 karty pridá +1 vôle na kolo. Robí z nej motor plnenia úlohy, ktorý ustojí aj vysoké ohrozenie v staging. Jej discard sa dá premeniť na výhodu (Noldor, alebo Stand and Fight na vrátenie spojencov z discardu). Krehká v boji (1 obrana) — nechaj ju questovať a chráň inými postavami.",
+  "dunhere|spirit":"Unikát: keď útočí na nepriateľa priamo v staging area (nie v strete), pripočíta si k útoku silu hrozby toho nepriateľa — dokáže zabíjať veľkých nepriateľov skôr, než ťa začnú ohrozovať, bez toho, aby si ich musel engagovať. Skvelý proti bossom, ktorých nechceš pustiť do stretu. Chce zbraň/buff a Ranged efekty pomáhajú. V multiplayeri a proti staging-heavy questom žiari; inak nika.",
+  "eleanor|spirit":"Raz za kolo (vyčerpaním) zruší efekt „pri odhalení“ na karte zrady — cancel priamo z hrdinu, bez míňania kariet z ruky. Je to poistka, kým nerozohráš A Test of Will, a šetrí miesto v decku. Nevýhoda: vyčerpaním v tom kole nequestuje ani nebráni, a niektoré najhoršie zrady sú „Surge“ alebo nie sú „pri odhalení“. Solídna sólo hrdinka do nízkeho ohrozenia.",
+  "denethor|lore":"Za vyčerpanie sa pozrie na vrchnú kartu encounter decku a môže ju presunúť naspodok — poznáš a čiastočne riadiš, čo príde, čo je v sóle obrovská výhoda pri plánovaní questu a stretov. K tomu má 3 obranu, takže vie aj brániť (kým ho nevyčerpáš na scry). Kombinuje sa s ďalším scryingom (Henamarth, Risk Some Light) a s threat kontrolou. Pozor na jeho vyššie štartové ohrozenie.",
+  "beravor|lore":"Najlepší splash hrdina do akéhokoľvek decku: raz za kolo (vyčerpaním) dotiahne 2 karty ľubovoľnému hráčovi. Konzistentný card advantage rieši najväčší problém hry — že bez draw uvidíš málo balíčka. Vyčerpanie znamená, že v tom kole nequestuje ani nebráni, tak ju ideálne readuj (Unexpected Courage) alebo použi až po questovaní. Do Lore pasuje takmer všade.",
+  "glorfindel|lore":"Prémiové staty (3 vôľa, 3 útok, 1 obrana, 5 HP) za nízke ohrozenie robia z neho jedného z najefektívnejších hrdinov v hre. V Lore verzii platí 1 threat, kedykoľvek si vylieči 1 poškodenie — to vyrieši Light of Valinor (questuje bez vyčerpania) a Asfaloth (location control). S týmito dvomi doplnkami je to takmer dokonalý všestranný hrdina; bez nich threat pomaly rastie.",
   // --- Základná krabica: kľúčové hráčske karty ---
-  "a test of will":"Najdôležitejšia karta v hre — za 1 zruší when-revealed treachery (aj Doomed/Surge). Auto-include v každom Spirit decku, hraj 3×.",
-  "hasty stroke":"Zruší shadow efekt — záchrana pri obrane proti nebezpečným shadow kartám. Situačné, ale v ťažkých combat questoch nenahraditeľné.",
-  "sneak attack":"Vloží spojenca zadarmo na jednu fázu a vráti ho do ruky. S Gandalfom legendárne combo (úder / −threat / draw). Extrémne flexibilné tempo.",
-  "gandalf|neutral":"Najlepší spojenec v hre — 4/4/4, pri vstupe draw 3 / −5 threat / 4 poškodenie. Ideálny cez Sneak Attack. Patrí skoro do každého decku.",
-  "steward of gondor":"Najlepšia resource acceleration — +2 zdroje za kolo sfére, na ktorej hrdinovi leží. Rozbehne drahé aj cross-sphere karty. Absolútny staple.",
-  "unexpected courage":"Readuje ľubovoľného hrdinu každé kolo — akčná výhoda č. 1. V sóle zlato (obranca bráni 2×, quester questuje aj bojuje).",
-  "northern tracker":"Kráľ location control — každé kolo dá 1 postup na každú lokáciu v hre (staging aj aktívnu). K tomu 3 telo. Staple do location-heavy questov.",
-  "faramir|leadership":"Počas questu dá +1 vôle každej questujúcej postave — pri veľa spojencoch obrovský plošný buff. Top questovací spojenec.",
-  "henamarth riversong":"Za 1 vidíš vrch encounter decku — perfektná kontrola staging fázy v sóle. Lacný, opakovaný scry.",
-  "feint":"Zruší útok jedného nepriateľa v tomto kole — kúpi čas proti bossovi alebo keď nemáš obrancu. Vynikajúce combat tempo.",
-  "forest snare":"Trvalo zamkne nepriateľa (nemôže útočiť) — deaktivuje bossa (napr. Hill Troll na Anduine). Klasická odpoveď na veľkých.",
-  "gleowine":"1 karta draw za kolo (vyčerpaním) — spoľahlivý, splashovateľný motor kariet do každého decku.",
-  "daughter of the nimrodel":"Vylieči 2 HP za kolo — najlacnejší opakovaný healing. Kľúč proti Archery a direct damage.",
-  "self preservation":"Vylieči 2 HP z pripojenej postavy za akciu — udrží nažive obrancu či Gimliho.",
-  "miner of the iron hills":"Odstráni condition doplnok z postavy — jediná lacná odpoveď na nebezpečné condition treachery.",
-  "the galadhrim's greeting":"−4 threat (a v combo s Elrond's Counsel až −6) — chrbtica threat kontroly v Spirit.",
-  "secret paths":"Zvolená lokácia v staging nemá počas questu silu hrozby — pomáha prekonať ťažké questovacie kolá a location-heavy sety.",
-  "dwarven tomb":"Vráti Spirit event z discardu (napr. A Test of Will) — vďaka recursion stačia eventy 2×.",
-  "will of the west":"Zamieša discard späť do balíčka — recyklácia kľúčových kariet a poistka proti dlhým hrám/millu.",
-  "blade of gondolin":"Lacná zbraň: +1 útok a +1 postup pri zabití Orka — skorá agresia aj questový bonus.",
-  "citadel plate":"+4 HP na postavu — spraví z obrancu/Gimliho tank, ktorý ustojí aj veľké údery.",
-  "horn of gondor":"Vráti 1 zdroj vždy, keď spojenec odíde z hry — palivo pre chump-blocking a Sneak Attack decky.",
-  "stand and fight":"Vráti spojenca (aj mocného) z discardu do hry za jeho cenu — hodnota po discard efektoch a na drahých spojencov.",
-  "radagast's staff":"Zlacní/zadarmo hráš Creature spojencov (vtáky, medvede) — motor pre Eagle/Creature decky.",
-  "lore of imladris":"Vylieči 4 HP jednej postave — silné jednorazové liečenie po veľkom údere.",
-  "snowbourn scout":"1-cost quester, čo pri vstupe dá 1 postup na lokáciu — lacný chump aj location help.",
-  "lorien's wealth":"Draw 3 za 2 (Lore) — jednorazový card advantage do Lore deckov.",
-  "we are not idle":"Zdroje podľa počtu trpaslíkov v hre — skorý ramp do dwarf deckov.",
-  "common cause":"Presunie zdroj medzi hrdinami — vyhladzuje cross-sphere ekonomiku a umožní drahé hry.",
+  "a test of will":"Najdôležitejšia karta v hre: za 1 zruší efekt „pri odhalení“ na karte zrady (a tým aj Doomed/Surge z takej karty). Jediná spoľahlivá odpoveď na najhoršie treachery, ktoré inak dokážu prehrať hru samé. Auto-include v každom Spirit decku, vždy 3 kópie; s Dwarven Tomb ju recyklu­ješ z discardu. Nauč sa ju držať na tú správnu kartu — je to tvoja poistka.",
+  "hasty stroke":"Za 1 zruší shadow efekt počas obrany — záchrana proti shadow kartám, ktoré pridávajú útok alebo rušia obranu a inak zabíjajú hrdinu. Je situačná (v niektorých questoch takmer zbytočná, v iných život zachraňujúca), preto sa často drží v sideboarde a berie na combat-ťažké scenáre. Kombinuje sa so scryingom, keď vieš, aký shadow prichádza. V sóle cenná, lebo máš málo obrancov.",
+  "sneak attack":"Za 1 vloží spojenca z ruky priamo do hry a na konci fázy ho vráti späť do ruky — dočasné telo zadarmo. S Gandalfom je to legendárne combo: zahráš ho, spustíš jeho vstupný efekt (−5 threat / draw 3 / 4 poškodenie) a vrátiš do ruky na ďalšie kolo. Funguje aj na núdzového obrancu/útočníka alebo na spustenie „pri vstupe“ efektov. Jedna z najflexibilnejších tempo kariet v hre.",
+  "gandalf|neutral":"Najsilnejší spojenec v hre: 4/4/4 telo a pri vstupe si vyberieš draw 3 / −5 threat / 4 priame poškodenie — vždy presne to, čo potrebuješ. Na konci kola odchádza, čo je ideálne s Sneak Attack (zahráš lacno a vrátiš) alebo s Horn of Gondor (zdroj späť). Patrí skoro do každého decku ako univerzálna odpoveď na krízu. Drahý (5), preto ho často hráš cez triky, nie za plnú cenu.",
+  "steward of gondor":"Najlepšia akcelerácia zdrojov v hre: pripne sa na hrdinu a dáva +2 zdroje do jeho sféry každé kolo. Rozbehne drahé karty, umožní cross-sphere ekonomiku (daj ho hrdinovi sféry, ktorú chceš „kŕmiť“) a je základom nespočetných deckov. Absolútny staple do Leadership — alebo hocikam cez A Good Harvest. Prioritný cieľ pre Master of the Forge aj pre mulligan.",
+  "unexpected courage":"Pripne sa na hrdinu a raz za kolo ho pripraví (ready) — čistá akčná výhoda, jedna z najlepších v hre. V sóle je to zlato: obranca ubráni dva útoky, quester questuje a potom bojuje, alebo Beravor dotiahne karty a ešte niečo spraví. Daj ju na svojho najvyťaženejšieho hrdinu. Do takmer každého Spirit/utility decku.",
+  "northern tracker":"Kráľ location control: každé kolo položí 1 žetón postupu na každú lokáciu v hre — v staging aj na aktívnu. To čistí staging area od location-hrozby a rýchlo dokončuje lokácie, čo je kľúč proti location-heavy questom (Emyn Muil, Osgiliath). K tomu má 2 vôľu a 3 HP, takže aj questuje a prežije. Pri viacerých lokáciách je jeho efekt obrovský.",
+  "faramir|leadership":"Kým questuje, dá +1 vôle KAŽDEJ questujúcej postave — pri swarme spojencov obrovský plošný násobič plnenia úlohy. V decku s veľa lacnými spojencami (Gondor, Outlands) sám vyhráva questovú fázu. Draho (4), ale efekt sa vracia každé kolo, kým questuje. Skvelý cieľ pre Sneak Attack kvôli vstupnému quest boostu.",
+  "henamarth riversong":"Za vyčerpanie sa pozrieš na vrchnú kartu encounter decku — dokonalá kontrola staging fázy v sóle, lebo vieš, koľko vôle nasadiť a či engagovať. Lacný (1), opakovaný a splashovateľný (Silvan). Kombinuje sa s efektmi, čo menia vrch encounter decku. Malé telo, ale hodnota je v informácii.",
+  "feint":"Za 1 zruší útok jedného nepriateľa v tomto kole (bojová akcia) — kúpi ti kolo proti bossovi alebo keď nemáš obrancu. Perfektné tempo: prežiješ útok, ktorý by inak zabil hrdinu, a nepriateľa zabiješ v ďalšej fáze. V sóle jedna z najlepších obranných/tempo kariet — ber viac kópií na combat questy.",
+  "forest snare":"Pripne sa na nepriateľa a ten nemôže útočiť — natrvalo deaktivuje aj bossa (klasicky Hill Troll na Anduine), ktorého inak nezvládneš. Kúpiš si čas, kým ho postupne zabiješ, alebo ho necháš zamrznutého. Restricted a drahšie, ale proti veľkým jediným nepriateľom neoceniteľné. Trap decky ho milujú.",
+  "gleowine":"Za vyčerpanie dotiahne 1 kartu za kolo — spoľahlivý, lacný a splashovateľný motor kariet do akéhokoľvek decku (rieši, že bez draw vidíš málo balíčka). Malé telo (1/1/1/3), hodnota je v konzistentnom card advantage. Ideálny s Unexpected Courage (draw a ešte questuj). Základný kameň Lore utility.",
+  "daughter of the nimrodel":"Za akciu vylieči 2 HP ľubovoľnej postave — najlacnejší opakovaný healing v hre a kľúčová odpoveď na Archery a direct damage. Drží nažive obrancov (Beregond, Gimli) aj krehkých hrdinov (Théodred). Unique, takže len 1 v hre. Do Lore/healing deckov takmer povinná.",
+  "self preservation":"Pripne sa na postavu a za akciu jej vylieči 2 HP — opakované liečenie viazané na jednu postavu, ideálne na tvojho tanka (Gimli, ktorý ťaží z poškodenia, alebo hlavného obrancu). Lacné a spoľahlivé. Nevýhoda: lieči len nositeľa, nie celú skupinu — na to je Warden of Healing.",
+  "miner of the iron hills":"Pri vstupe odstráni 1 condition doplnok (napr. nebezpečné treachery ako Caught in a Web na tvojej postave) — často jediná lacná odpoveď na condition efekty, ktoré inak ochromia hrdinu. Trpaslík s rozumným telom. Ber ho do sideboardu na scenáre s condition zradami.",
+  "the galadhrim's greeting":"Zníži ohrozenie o 4 (a s Elrond's Counsel v tom istom kole až o 6) — chrbtica threat kontroly v Spirite, ktorá ťa drží mimo dosahu engagementov a prehry na 50 threat. Recyklovateľná cez Dwarven Tomb, takže stačia 2 kópie. Do každého decku, čo bojuje s rastúcim ohrozením.",
+  "secret paths":"Vybraná lokácia v staging area nemá počas tejto fázy úlohy silu hrozby — pomôže prekonať ťažké questovacie kolo alebo location-heavy sety, kde by ťa staging inak zavalil. Lacné (0) a načasovateľné na kľúčové kolo. Kombinuje sa s location control (Northern Tracker) na úplné vyčistenie.",
+  "dwarven tomb":"Za 2 vráti ľubovoľný Spirit event z discardu do ruky — recur pre A Test of Will, The Galadhrim's Greeting či Stand and Fight, takže tvoje kľúčové eventy nikdy nedôjdu. Vďaka nemu stačia 2 kópie eventov namiesto 3. Do event-ťažkých Spirit deckov výborný value engine.",
+  "will of the west":"Za 1 zamieša celý tvoj discard späť do balíčka — recyklácia kľúčových kariet a poistka proti dlhým hrám a mill efektom (aby si nedošiel na karty). Situačné, ale v pomalých/grindových scenároch (Long Dark) záchrana. Zvyčajne stačí 1 kópia.",
+  "blade of gondolin":"Lacná zbraň (1): +1 útok a keď nositeľ zabije Orka, položí 1 žetón postupu na quest — skorá agresia s questovým bonusom proti orkom (väčšina raných scenárov). Restricted. Skvelá na Legolasa a bojových hrdinov v Orc-heavy questoch.",
+  "citadel plate":"+4 HP na postavu za 4 — spraví z hrdinu tank, ktorý ustojí aj obrie údery, a je prakticky nevyhnutná na Gimliho (viac HP = viac útoku a bezpečnosti). Restricted a drahá, ale premení krehkého obrancu na stenu. Kombinuj s liečením, nech HP dopĺňaš.",
+  "horn of gondor":"Zakaždým, keď ti spojenec odíde z hry, vráti 1 zdroj — palivo pre chump-blocking a Sneak Attack/odchodové decky, kde spojenci pravidelne miznú. Premieňa obetovanie spojencov na ekonomiku. Do Leadership tempo/swarm deckov.",
+  "stand and fight":"Vráti spojenca z ktoréhokoľvek discardu do hry za jeho cenu — hodnota po discard efektoch (vlastných aj encounter) a spôsob, ako lacno dostať späť mocného spojenca (napr. Gandalfa alebo veľkého obrancu). Spirit. Kombinuje sa s Éowyn/Noldor discardom.",
+  "radagast's staff":"Umožní Radagastovi platiť za Creature spojencov (vtáky, medvede) z jeho vlastného zdroja — ekonomický motor Eagle/Creature deckov, kde reťazíš lacných tvorov. Nika, ale vo svojom archetype zásadná. Vyžaduje Creature základ a Radagasta.",
+  "lore of imladris":"Vylieči 4 HP jednej postave za 2 — silné jednorazové liečenie po veľkom údere, ktoré zachráni hrdinu pred zničením. Lore. Doplnok k opakovanému liečeniu (Daughter of the Nimrodel) na „burst“ krízy.",
+  "snowbourn scout":"1-cost spojenec, ktorý pri vstupe položí 1 žetón postupu na aktívnu lokáciu — lacný chump blocker aj drobný location help a quester. Skvelý do swarm/tempo deckov (Sneak Attack, Horn of Gondor) a na obetovanie. Efektívny za svoju cenu.",
+  "lorien's wealth":"Za 2 (Lore) dotiahne 3 karty — jednorazový burst card advantage, ktorý naplní ruku pred veľkým kolom. Do Lore deckov, čo vedia karty využiť. Menej konzistentné než Gléowine, ale väčší jednorazový zisk.",
+  "we are not idle":"Za 1 (Leadership) získaš zdroje podľa počtu trpaslíkov v hre — skorý ramp do dwarf swarm deckov, ktorý ťa katapultuje dopredu, keď máš trpaslíkov na stole. Vyžaduje trpasličí základ; v dwarf decku výborný, inak nehrateľný.",
+  "common cause":"Presunie 1 zdroj z jedného hrdinu na druhého — vyhladzuje cross-sphere ekonomiku a umožní zaplatiť drahú kartu, keď máš zdroje na nesprávnom hrdinovi. Lacný fix. Menej potrebný so Steward/A Good Harvest, ale v multi-sphere decoch užitočný.",
 
   // --- Shadows of Mirkwood cyklus ---
   "fast hitch":"Readuje hobbita (druhá akcia v kole) — akčná výhoda; s viacerými hobbitmi reťazíš questing aj boj. Jadro hobbit deckov.",
@@ -1489,6 +1489,8 @@ function renderRoute(){
 }
 window.addEventListener("hashchange",renderRoute);
 window.go=go;
+function refreshApp(){ try{ location.href = location.origin + location.pathname + "?r=" + Date.now(); }catch(e){ location.reload(); } }
+window.refreshApp=refreshApp;
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeCard(); });
 
 /* ---------- boot ---------- */
