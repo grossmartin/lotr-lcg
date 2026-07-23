@@ -434,7 +434,22 @@ const OWNED_PACKS = [
   "The Land of Shadow","The Flame of the West","The Mountain of Fire",
   "The Fellowship of the Ring","The Two Towers","The Return of the King",
   // Angmar Awakened — novo získané (Lost Realm + prvé dva packy)
-  "The Lost Realm","The Wastes of Eriador","Escape from Mount Gram"
+  "The Lost Realm","The Wastes of Eriador","Escape from Mount Gram",
+  // Ring-maker cycle — kompletný cyklus (novo získané)
+  "The Voice of Isengard","The Dunland Trap","The Three Trials","Trouble in Tharbad",
+  "The Nîn-in-Eilph","The Nin-in-Eilph","Celebrimbor's Secret","The Antlered Crown"
+];
+
+/* Jednotlivé vlastnené karty mimo vyššie uvedených balíkov — presnejšie než
+ * celý pack, keď máš len pár konkrétnych kariet z krabice (napr. fanúšikovský
+ * CZ výber "Trpaslíci" z dvoch malých Hobbit Saga expanzií). Pridávaj sem
+ * názov karty (EN, presne ako na RingsDB), keď fyzicky vlastníš danú kartu,
+ * ale nie celý pack, do ktorého patrí. */
+const OWNED_SINGLES = [
+  // The Hobbit: Over Hill and Under Hill
+  "Thorin Oakenshield","Ori","Fili","Kili","A Very Good Tale",
+  // The Hobbit: On the Doorstep
+  "Glóin","Gloin","King Under the Mountain"
 ];
 
 /* Scenario tree + thematic decks.
@@ -444,17 +459,17 @@ const OWNED_PACKS = [
 const DATA = { groups: [
 
   { id:"core", title:"Revised Core Set", subtitle:"Základná krabica · 3 scenáre", kind:"scenarios", items:[
-    { id:"passage", name:"Passage Through Mirkwood", cz:"Průchod Temným hvozdem", deckIds:[293,21985,24754], moreIds:[77,53457] },
+    { id:"passage", name:"Passage Through Mirkwood", cz:"Průchod Temným hvozdem", deckIds:[293,21985,24754], moreIds:[77,53457,48236] },
     { id:"anduin",  name:"Journey Along the Anduin",  cz:"Cesta po Anduině",       deckIds:[305,24754], moreIds:[11611,5698,24479,8457,16008] },
     { id:"dolguldur", name:"Escape from Dol Guldur",  cz:"Útěk z Dol Gulduru",     deckIds:[307,5907,7586,8750], moreIds:[855], note:"Ťažký sólo scenár — nízke ohrozenie a obrana/liečenie sú kľúč." }
   ]},
 
   { id:"som", title:"Shadows of Mirkwood — cyklus", subtitle:"Stíny Temného hvozdu · 6 dobrodružstiev", kind:"scenarios", items:[
     { id:"gollum",   name:"The Hunt for Gollum",     cz:"Hon na Gluma",             deckIds:[306,436], moreIds:[986,19792] },
-    { id:"carrock",  name:"Conflict at the Carrock",  cz:"Střet u Károku",           deckIds:[732,36460], moreIds:[10529] },
-    { id:"rhosgobel",name:"A Journey to Rhosgobel",   cz:"Cesta do Rhosgobelu",      deckIds:[733,40561], moreIds:[10839] },
-    { id:"emynmuil", name:"The Hills of Emyn Muil",   cz:"Kopce Emyn Muil",          deckIds:[734,11125] },
-    { id:"marshes",  name:"The Dead Marshes",         cz:"Mrtvé močály",             deckIds:[736], moreIds:[11428,6182] },
+    { id:"carrock",  name:"Conflict at the Carrock",  cz:"Střet u Károku",           deckIds:[732,36460], moreIds:[10529,8075] },
+    { id:"rhosgobel",name:"A Journey to Rhosgobel",   cz:"Cesta do Rhosgobelu",      deckIds:[733,40561], moreIds:[10839,8075] },
+    { id:"emynmuil", name:"The Hills of Emyn Muil",   cz:"Kopce Emyn Muil",          deckIds:[734,11125], moreIds:[8075] },
+    { id:"marshes",  name:"The Dead Marshes",         cz:"Mrtvé močály",             deckIds:[736], moreIds:[11428,6182,8075] },
     { id:"returnmw", name:"Return to Mirkwood",       cz:"Návrat do Temného hvozdu", deckIds:[737,19448,23297] }
   ]},
 
@@ -465,9 +480,9 @@ const DATA = { groups: [
     { id:"redhorn",      name:"The Redhorn Gate",        cz:"Rudorohská brána",   deckIds:[20475,4997] },
     { id:"rivendell",    name:"Road to Rivendell",       cz:"Cesta do Roklinky",  deckIds:[5103], moreIds:[31201] },
     { id:"watcher",      name:"The Watcher in the Water", cz:"Strážce ve vodě",   deckIds:[5097,25049] },
-    { id:"longdark",     name:"The Long Dark",           cz:"Dlouhá tma",         deckIds:[5103], moreIds:[25087,5479] },
-    { id:"foundations",  name:"Foundations of Stone",    cz:"Kamenné základy",    deckIds:[5103], moreIds:[5479] },
-    { id:"shadowflame",  name:"Shadow and Flame",        cz:"Stín a plamen",      deckIds:[38444,13831,2781] }
+    { id:"longdark",     name:"The Long Dark",           cz:"Dlouhá tma",         deckIds:[5103], moreIds:[25087,5479,52000] },
+    { id:"foundations",  name:"Foundations of Stone",    cz:"Kamenné základy",    deckIds:[5103], moreIds:[5479,52000] },
+    { id:"shadowflame",  name:"Shadow and Flame",        cz:"Stín a plamen",      deckIds:[38444,13831,2781], moreIds:[52000] }
   ]},
 
   { id:"ats", title:"Heirs of Númenor & Against the Shadow — cyklus", subtitle:"9 scenárov", kind:"scenarios", items:[
@@ -482,36 +497,56 @@ const DATA = { groups: [
     { id:"morgulvale", name:"The Morgul Vale",          cz:"Morgulské údolí",       deckIds:[12970,7401] }
   ]},
 
+  { id:"ringmaker", title:"The Ring-maker — cyklus", subtitle:"Tvůrce prstenu · 9 scenárov", kind:"scenarios", items:[
+    { id:"fordsisen",   name:"The Fords of Isen",        cz:"Isenské brody",           deckIds:[58202], moreIds:[11693,38114,53978] },
+    { id:"catchorc",    name:"To Catch an Orc",          cz:"Lapení skřeta",           deckIds:[14169], moreIds:[36721,38114] },
+    { id:"intofangorn", name:"Into Fangorn",             cz:"Do Fangornu",             deckIds:[54342], moreIds:[38114] },
+    { id:"dunlandtrap", name:"The Dunland Trap",         cz:"Past Vrchovců",           deckIds:[58625], moreIds:[14058,38114] },
+    { id:"threetrials", name:"The Three Trials",         cz:"Tři zkoušky",             deckIds:[35104] },
+    { id:"troubletharbad", name:"Trouble in Tharbad",    cz:"Potíže v Tharbadu",       deckIds:[6514], moreIds:[19267,38114] },
+    { id:"nineilph",    name:"The Nîn-in-Eilph",         cz:"Nin-in-Eilph",            deckIds:[17204] },
+    { id:"celebrimbor", name:"Celebrimbor's Secret",     cz:"Celebrimborovo tajemství",deckIds:[26234], moreIds:[38114] },
+    { id:"antleredcrown", name:"The Antlered Crown",     cz:"Parohatá koruna",         deckIds:[49530], moreIds:[38114] }
+  ]},
+
+  { id:"angmar", title:"Angmar Awakened — cyklus", subtitle:"Angmar se probouzí · 5 vlastnených scenárov", kind:"scenarios", items:[
+    { id:"chetwood",    name:"Intruders in Chetwood",    cz:"Vetřelci v Kotěnském lese", deckIds:[62534], moreIds:[7124] },
+    { id:"weatherhills",name:"The Weather Hills",        cz:"Povětrné vrchy",            deckIds:[22465], moreIds:[7121,7120] },
+    { id:"deadmensdike",name:"Deadmen's Dike",           cz:"Val mrtvých mužů",          deckIds:[30811], moreIds:[22650,7133] },
+    { id:"wastes",      name:"The Wastes of Eriador",    cz:"Pustiny Eriadoru",          deckIds:[34776], moreIds:[15423,1565,55625] },
+    { id:"mountgram",   name:"Escape from Mount Gram",   cz:"Útěk z hory Gram",          deckIds:[49435], moreIds:[38090,38091,45296,15423] }
+  ]},
+
   { id:"saga_fotr", title:"Saga · The Fellowship of the Ring", subtitle:"Spoločenstvo Prstenu · 6 scenárov", kind:"scenarios", items:[
-    { id:"shadowpast",  name:"A Shadow of the Past",     cz:"Stín minulosti",        deckIds:[18970] },
+    { id:"shadowpast",  name:"A Shadow of the Past",     cz:"Stín minulosti",        deckIds:[18970], moreIds:[28183,6483] },
     { id:"knifedark",   name:"A Knife in the Dark",      cz:"Nůž ve tmě",            deckIds:[9293,16332] },
-    { id:"flightford",  name:"Flight to the Ford",       cz:"Útěk k Brodu",          deckIds:[9293,16332], moreIds:[850] },
+    { id:"flightford",  name:"Flight to the Ford",       cz:"Útěk k Brodu",          deckIds:[9293,16332], moreIds:[850,39114] },
     { id:"ringsouth",   name:"The Ring Goes South",      cz:"Prsten putuje na jih",  deckIds:[21753], moreIds:[33360,8866] },
     { id:"mines",       name:"Journey in the Dark",      cz:"Cesta v temnotě (Moria)",deckIds:[16332], moreIds:[42972] },
     { id:"breaking",    name:"Breaking of the Fellowship",cz:"Rozpad Společenstva",  deckIds:[12646] }
   ]},
 
   { id:"saga_tt", title:"Saga · The Two Towers", subtitle:"Dvě věže · 6 scenárov", kind:"scenarios", items:[
-    { id:"urukhai",     name:"The Uruk-hai",             cz:"Uruk-hai",              deckIds:[16332], moreIds:[59441,9160,22015] },
-    { id:"helmsdeep",   name:"Helm's Deep",              cz:"Helmův žleb",           deckIds:[22029,12656] },
+    { id:"urukhai",     name:"The Uruk-hai",             cz:"Uruk-hai",              deckIds:[16332], moreIds:[59441,9160,22015,27743] },
+    { id:"helmsdeep",   name:"Helm's Deep",              cz:"Helmův žleb",           deckIds:[22029,12656], moreIds:[9382] },
     { id:"isengard",    name:"The Road to Isengard",     cz:"Cesta do Železného pasu",deckIds:[12688], moreIds:[22066] },
     { id:"marshes2",    name:"The Passage of the Marshes",cz:"Přechod přes močály",  deckIds:[12690], moreIds:[37144] },
-    { id:"crossroads",  name:"Journey to the Cross-roads",cz:"Cesta na Křižovatku",  deckIds:[16332], moreIds:[10516] },
+    { id:"crossroads",  name:"Journey to the Cross-roads",cz:"Cesta na Křižovatku",  deckIds:[16332], moreIds:[10516,21310,11880] },
     { id:"shelob",      name:"Shelob's Lair",            cz:"Odulino doupě",         deckIds:[12707] }
   ]},
 
   { id:"saga_rotk", title:"Saga · The Return of the King", subtitle:"Návrat krále · 6 scenárov", kind:"scenarios", items:[
-    { id:"greycompany", name:"The Passing of the Grey Company", cz:"Cesta Šedé družiny",   deckIds:[12711] },
+    { id:"greycompany", name:"The Passing of the Grey Company", cz:"Cesta Šedé družiny",   deckIds:[12711], moreIds:[54039] },
     { id:"siegegondor", name:"The Siege of Gondor",         cz:"Obléhání Gondoru",           deckIds:[16332] },
     { id:"pelennor",    name:"The Battle of the Pelennor Fields", cz:"Bitva na Pelennorských polích", deckIds:[9730,13464,12776], moreIds:[638,639] },
-    { id:"cirithungol", name:"The Tower of Cirith Ungol",   cz:"Věž Cirith Ungol",           deckIds:[12829] },
-    { id:"blackgate",   name:"The Black Gate Opens",        cz:"Černá brána se otevírá",     deckIds:[12833] },
-    { id:"mountdoom",   name:"Mount Doom",                  cz:"Hora osudu",                 deckIds:[12844] }
+    { id:"cirithungol", name:"The Tower of Cirith Ungol",   cz:"Věž Cirith Ungol",           deckIds:[12829], moreIds:[54042] },
+    { id:"blackgate",   name:"The Black Gate Opens",        cz:"Černá brána se otevírá",     deckIds:[12833], moreIds:[7715] },
+    { id:"mountdoom",   name:"Mount Doom",                  cz:"Hora osudu",                 deckIds:[12844], moreIds:[55886] }
   ]},
 
   { id:"themes", title:"Tematické balíky", subtitle:"Archetypy naprieč scenármi", kind:"themes", items:[
-    { id:"dwarves", name:"Trpaslíci", cz:"Dwarves — swarm & mining",   deckIds:[104,8313,6538,856,842,659], moreIds:[739,740,817,632,631,753] },
-    { id:"rohan",   name:"Rohan",     cz:"Rohan — willpower & tempo",  deckIds:[23297,765,790,780], moreIds:[848,834,8271,827] },
+    { id:"dwarves", name:"Trpaslíci", cz:"Dwarves — swarm & mining",   deckIds:[104,8313,6538,856,842,659], moreIds:[739,740,817,632,631,753,29455,18499,7654] },
+    { id:"rohan",   name:"Rohan",     cz:"Rohan — willpower & tempo",  deckIds:[23297,765,790,780], moreIds:[848,834,8271,827,11693,14058] },
     { id:"hobbits", name:"Hobiti",    cz:"Hobbits — saga hrdinovia",   deckIds:[763,660,9547], moreIds:[7217,7647] },
     { id:"elves",   name:"Elfovia",   cz:"Elves — Noldor & Imladris",  deckIds:[782,783,641,437], moreIds:[438,640,852,645] },
     { id:"gondor",  name:"Gondor",    cz:"Gondor — obrana & zdroje",   deckIds:[5090,434,840,838], moreIds:[839,841,420,755,3659,762,779] },
@@ -521,7 +556,9 @@ const DATA = { groups: [
     { id:"noldor",  name:"Noldor",       cz:"Noldor — Elrond & Vilya value",  deckIds:[8682], moreIds:[782,645] },
     { id:"monotactics", name:"Mono‑Tactics", cz:"Čistý boj — zbrane & brnenie", deckIds:[2306], moreIds:[8297] },
     { id:"monospirit",  name:"Mono‑Spirit",  cz:"Questing & threat control",   deckIds:[984], moreIds:[7294] },
-    { id:"secrecy", name:"Secrecy",       cz:"Nízke ohrozenie — lacné karty",  deckIds:[23431], moreIds:[19943] }
+    { id:"secrecy", name:"Secrecy",       cz:"Nízke ohrozenie — lacné karty",  deckIds:[23431], moreIds:[19943] },
+    { id:"silvan",  name:"Silvan",        cz:"Lesní elfovia — Lothlórien & Mirkwood (Ring-maker)", deckIds:[9199], moreIds:[2135,10693,10773,16528] },
+    { id:"doomed",  name:"Doomed",        cz:"Zatratenie — threat za silu (Ring-maker)", deckIds:[40466], moreIds:[13957] }
   ]}
 
 ]};
@@ -570,6 +607,7 @@ async function getJSON(url){
 const CARDS = { byCode:{}, ownedTitles:new Set(), loaded:false };
 const PLAYER_TYPES = new Set(["hero","ally","attachment","event","player-side-quest","treasure"]);
 const OWNED_NORM = new Set(OWNED_PACKS.map(norm));
+const OWNED_SINGLES_NORM = new Set(OWNED_SINGLES.map(norm));
 
 async function loadCards(force){
   const CACHE="lotr_cards_v2";
@@ -583,7 +621,7 @@ async function loadCards(force){
   indexCards(data);
 }
 function indexCards(list){
-  CARDS.byCode={}; CARDS.ownedTitles=new Set();
+  CARDS.byCode={}; CARDS.ownedTitles=new Set(OWNED_SINGLES_NORM);
   for(const c of list){
     CARDS.byCode[c.code]=c;
     if(OWNED_NORM.has(norm(c.pack_name))) CARDS.ownedTitles.add(norm(c.name));
@@ -1009,7 +1047,25 @@ const TIPS={
   pelennor:"Bitka — Nazgûl/Wraith a Mûmakil. Rohan swarm, burst na Nazgûla a pevná obrana.",
   cirithungol:"Frodo zajatý; Wraith on Wings a Shagrat (nedá sa chumpovať). Rýchla vôľa, odpoveď na bossa a healing.",
   blackgate:"„Takmer nevyhrateľný“ — obrovské množstvo nepriateľov, musíš questovať a vydržať. Masívna vôľa (Gondor/Erestor swarm) a výdrž.",
-  mountdoom:"Fortitude testy, vyčerpaní Frodo/Sam. Vysoká vôľa na testy, threat management a Phial of Galadriel; drž sa do ~10. kola."
+  mountdoom:"Fortitude testy, vyčerpaní Frodo/Sam. Vysoká vôľa na testy, threat management a Phial of Galadriel; drž sa do ~10. kola.",
+
+  // --- The Ring-maker cyklus ---
+  fordsisen:"Úvodný quest cyklu — obrana riečneho brodu, Rohanskí jazdci a orkovia z Isengardu. Potrebuješ solídnu obranu aj plošný úder; dobrý úvod pre Rohan/Tactics zostavu.",
+  catchorc:"Časovo obmedzený quest (Time counters) — musíš chytiť Mugasha živého skôr, než mu dôjde čas, inak sa uvoľní a zhorší situáciu. Rýchle questovanie a nízky threat pomáhajú; tematicky sadne Doomed/Isengard balík (Grima, Éowyn).",
+  intofangorn:"Huorni (stromové bytosti) sa počas boja správajú netradične, nie ako klasickí útočníci. Relatívne pokojnejší, viac o riešení lokácií a nezvyčajných efektov než o čistom boji.",
+  dunlandtrap:"Zavádza Dunland nepriateľov, ktorí trestajú veľkú ruku kariet — drž si menej kariet v ruke (Noldor discard, menej vlastného draw) a priprav odpovede na treachery.",
+  threetrials:"Tri oddelené skúšky/výzvy za sebou (rôzne typy záťaže) — všestranný deck, čo zvládne viac úloh naraz, je výhodou. Zavádza posily Lothlórien (Rúmil, Warden of Arnor).",
+  troubletharbad:"Nájazdy Dunlendingov na mestečko Tharbad — obranný/ochranný charakter questu. Zavádza ďalšie Silvan karty (Galadhrim Minstrel, O Lórien!, Defender of the Naith) — dobrá príležitosť rozbehnúť Silvan archetyp.",
+  nineilph:"Bažinatá, silne lokačná oblasť (Nîn-in-Eilph = „Vody Dúhovky“) — location control je kľúč. Plne odomyká Silvan archetyp (Mirlonde, Celduin Traveler, Bow of the Galadhrim, Wingfoot).",
+  celebrimbor:"Quest okolo Eregionu a tajomstva kováčstva prsteňov — odmeňuje Elven/Noldor karty (Nenya, Galadriel's Handmaiden, Orophin). Menej o hrubej sile, viac o riešení treachery a udalostí.",
+  antleredcrown:"Záverečný quest cyklu — vyvrcholenie proti hlavnému nepriateľovi Dunlandu. Priprav si najsilnejšiu zostavu z celého cyklu (Silvan/Noldor podpora + spoľahlivá obrana) a tech na jeho signature hrozby.",
+
+  // --- Angmar Awakened cyklus ---
+  chetwood:"Statický nepriateľ Orc War Party sa dá poraziť len burstom poškodenia naraz (Sneak Attack + Gandalf je ideálny). Scry pomáha vyhnúť sa najhorším treachery; Isengard Messenger sadne na Doomed synergiu.",
+  weatherhills:"Poveternostné treachery (Biting Wind a pod.) trestajú nedostatok liečenia — priprav si healing a obranu (bránenie je tu ťažšie, málo hrdinov s vysokou obranou). Lokácia Sheltered Valleys pomáha schovať zraniteľné postavy.",
+  deadmensdike:"Shadow karty dávajú poškodenie podľa ceny odhalenej hráčskej karty — drž si lacnú krivku (ideálne nič nad 2 zdroje) a menej duplicitných spojencov (viaceré efekty ich trestajú). Pozor na vedľajšiu úlohu Power of Angmar, ktorá blokuje A Very Good Tale a Elven-light.",
+  wastes:"Cyklus Deň/Noc — cez deň questuj naplno (nepriatelia nerobia engagement checks), cez noc sa radšej stiahni a bráň pred wargmi (v noci nejde dávať postup na quest). Pozor na treachery, čo odhodí tvojho najdrahšieho spojenca — nedávaj všetko do jednej drahej karty.",
+  mountgram:"Hrdinovia aj karty sú na začiatku „zajatí“ — postupne ich vyslobodzuješ. Zajaté sú len spojenec/predmet/artefakt/mount doplnky, takže eventy a iné doplnky zostávajú voľné. Leadership „signal“ doplnky pomáhajú nájsť zvyšných hrdinov rýchlejšie."
 };
 
 /* ==================================================================
@@ -1020,7 +1076,7 @@ const ANALYSIS = {
   // --- Základná krabica: hrdinovia ---
   "aragorn|leadership":"Najuniverzálnejší hrdina v hre — statline 2 vôľa / 3 útok / 2 obrana / 5 HP zvládne questovať, útočiť aj brániť, a vďaka Sentinelu môže brániť aj útoky mierené na spoluhráča. Jeho reakcia (za 1 zdroj) resetuje tvoje ohrozenie na štartovú hodnotu, keď ho vyšleš na quest; v kombinácii so Sword that was Broken alebo Celebrían's Stone drží threat trvalo nízko. Chce však zdroj každé kolo a súťaží o doplnky — daj mu Steward of Gondor. Ako splash do Leadership je to kotva takmer každého decku a jeden z najsilnejších hrdinov vôbec.",
   "theodred|leadership":"Čistý ekonomický motor: keď ktorákoľvek postava úspešne questuje, vloží 1 zdroj do zásoby ľubovoľného hrdinu — aj inej sféry. To je stály +1 zdroj za kolo a zároveň vyhladenie splashov, takže rozbehne pomalé, na zdroje náročné decky. Háčik je jeho krehkosť: 1 útok a len 4 HP z neho robia terč pre encounter direct-damage (Necromancer's Reach) a shadow efekty. Chráň ho a nevyšli ho tam, kde utrpí úder — ak padne, deck stráca motor.",
-  "gloin|leadership":"Za každý bod poškodenia, ktorý utrpí, získa 1 zdroj — premení nepriateľské údery na ekonomiku. So spoľahlivým opakovaným liečením (Warden of Healing, Self Preservation) je z neho zdrojová fontána; bez liečenia je to hazard, lebo ťažiť poškodenie mu skracuje život. Najlepší v trpasličích a Leadership ekonomických deckoch, ktoré ho udržia nad vodou. Sám o sebe slabší než Théodred, ale v správnom motore výborný.",
+  "gloin|leadership":"Za každý bod poškodenia, ktorý utrpí, získa 1 zdroj — premení nepriateľské údery na ekonomiku. So spoľahlivým opakovaným liečením (Warden of Healing, Self Preservation) je z neho zdrojová fontána; bez liečenia je to hazard, lebo ťažiť poškodenie mu skracuje život. Najlepší v trpasličích a Leadership ekonomických deckoch, ktoré ho udržia nad vodou. Sám o sebe slabší než Théodred, ale v správnom motore výborný. — Existuje aj ako spojenec (On the Doorstep): pri dostatku 5 trpaslíkov v hre pri zahraní z ruky pridá 2 zdroje ľubovoľnému hrdinovi — rýchly ekonomický vstrek do trpasličieho swarmu.",
   "gimli|tactics":"Jeho útok stúpa o 1 za každý bod poškodenia na ňom (základ 2, teoreticky až k 7) — čím viac schytá, tým je smrteľnejší. Kľúčom je udržať ho nažive pri vysokom poškodení: Citadel Plate (+4 HP), Self Preservation a Warden of Healing z neho spravia takmer nezabiteľný sekací stroj. Nequestuje (0 vôle), takže potrebuje partnera na vôľu. V sólo bojových decoch jeden z najlepších útočníkov.",
   "legolas|tactics":"Keď zabije nepriateľa, položí 2 žetóny postupu na aktuálny quest — spája boj a questovanie, čo je v sóle vzácne. S 3 útoku a Ranged strieľa aj na nepriateľov spoluhráča a stabilne kosí, čím zároveň tlačí quest dopredu. Daj mu zbraň (Blade of Gondolin, Rivendell Blade) a readying (Unexpected Courage) pre viac zabití za kolo. Patrí do takmer každého Tactics decku.",
   "thalin|tactics":"Kým questuje, každý nepriateľ pri odhalení dostane 1 poškodenie — to zabíja 1-HP swarm skôr, než vôbec vstúpi do hry, a zjemňuje ťažké encounter kolá. K tomu má slušnú vôľu (1) aj útok (2), takže je aj solídny quester. Výborný proti goblinom a pavúčím rojom (Seventh Level, Passage). Kombinuje sa s efektmi „keď je nepriateľ zničený“ a s direct-damage kartami.",
@@ -1136,7 +1192,16 @@ const ANALYSIS = {
   "hobbit cloak":"+1 obrana a +2 HP hobbitovi — spraví z Frodo/Sama prekvapivo dobrého obrancu.",
   "sting":"Hobbití meč — lacný útok pre Bilba/Frodo/Sama; s Daggerom robí z hobbitov nebezpečné postavy.",
   "elf-stone":"Zahráš spojenca zadarmo (aj drahého/Outlands) — tempo a mustering trik.",
-  "rosie cotton":"Hobbití spojenec — readuje či lieči hobbita; lepidlo hobbit decku."
+  "rosie cotton":"Hobbití spojenec — readuje či lieči hobbita; lepidlo hobbit decku.",
+
+  // --- Trpaslíci — extra karty z Hobbit Saga (Over Hill and Under Hill / On the Doorstep) ---
+  "thorin oakenshield|leadership":"Vodca trpasličieho swarmu: kým máš v hre aspoň 5 trpaslíkov, každé kolo automaticky získa +1 zdroj navyše (bez akcie či vyčerpania). Vysoký štartový threat (12) je daň za silu — kombinuj s Nori alebo iným threat-reduction hrdinom. Fili + Kili ťa k 5 trpaslíkom dostanú už v 1.–2. kole. Motor, okolo ktorého sa stavia celý dwarf swarm archetyp.",
+  "ori|lore":"Kým máš v hre aspoň 5 trpaslíkov, na začiatku fázy zdrojov dotiahne 1 kartu navyše — v rozbehnutom trpasličom deckom stály card advantage bez akejkoľvek akcie. Solídne staty (2/2/1/3) aj ako obyčajný quester. Skvele dopĺňa Thorina Oakenshielda (spolu = extra zdroj aj extra karta každé kolo, len za to, že máš 5 trpaslíkov v hre).",
+  "mirlonde|lore":"Silvan (Lesný elf) hrdinka z Nîn-in-Eilph: každý tvoj Lore hrdina má vytlačený threat cost o 1 nižší — čistá a trvalá redukcia štartového ohrozenia, ktorá sa počíta hneď na začiatku hry. Solídne staty (2/2/1/3). Ideálna do multi-Lore zostáv alebo ako splash na zníženie celkového rizika bez straty karty v decku.",
+  "fili":"Lacný trpasličí spojenec s comboReakciou: keď ho zahráš z ruky vo fáze plánovania, vyhľadá Kiliho v balíčku a vloží ho rovno do hry (zadarmo, mimo poradia). Spolu s Kilim tak za cenu jedného dostaneš dve telá na stole — najrýchlejšia cesta k „5 trpaslíkom“ pre Thorina/Oriho/Glóina. Vždy ber s Kilim ako pár.",
+  "kili":"Zrkadlový partner Filiho — keď ho zahráš z ruky vo fáze plánovania, vytiahne Filiho z balíčka priamo do hry. Kombinácia Fili+Kili je najefektívnejší spôsob, ako v dwarf swarm decku rýchlo naplniť podmienku „5 trpaslíkov“ pre Thorina, Oriho aj Glóina. Bez druhého z páru je to len priemerný spojenec.",
+  "king under the mountain":"Unikátny doplnok na trpasličieho hrdinu: za akciu (vyčerpaním) sa pozrieš na vrchné 2 karty balíčka, 1 si vezmeš do ruky a druhú odhodíš — opakovaná selekcia/filtrovanie balíčka, ktorá ťa dostane ku kľúčovým kartám rýchlejšie. Lacný spôsob, ako zvýšiť konzistenciu trpasličieho decku bez závislosti na drawe zo spojencov.",
+  "a very good tale":"Silná Leadership udalosť za 0: vyčerpáš 2 vlastných spojencov, zamiešaš balíček a odhodíš vrchných 5 kariet, potom až 2 z takto odhodených spojencov vložíš do hry zadarmo (ich súčet ceny nesmie presiahnuť súčet ceny vyčerpaných). V praxi vymeníš dvoch lacných/odslúžených spojencov za dvoch silnejších/hodnotnejších priamo z balíčka — famózne s Fili/Kili reťazou aj s Gandalfom, ktorého práve odohral Sneak Attack. Jedna z najlepších tempo kariet v dwarf archetype."
 };
 function getAnalysis(c){ if(!c) return null;
   return ANALYSIS[norm(c.name)+"|"+(c.sphere_code||"")] || ANALYSIS[norm(c.name)] || null;
@@ -1213,8 +1278,11 @@ function renderAnalysis(){
     {title:"Khazad-dûm & Dwarrowdelf", packs:["Khazad-dûm","The Redhorn Gate","Road to Rivendell","The Watcher in the Water","The Long Dark","Foundations of Stone","Shadow and Flame"]},
     {title:"Heirs of Númenor & Against the Shadow", packs:["Heirs of Númenor","The Steward's Fear","The Druadan Forest","Encounter at Amon Dîn","Assault on Osgiliath","The Blood of Gondor","The Morgul Vale"]},
     {title:"Sága (Pán prsteňov)", packs:["The Black Riders","The Road Darkens","The Treason of Saruman","The Land of Shadow","The Flame of the West","The Mountain of Fire"]},
-    {title:"Angmar Awakened (nové karty)", packs:["The Lost Realm","The Wastes of Eriador","Escape from Mount Gram"]}
+    {title:"Angmar Awakened (nové karty)", packs:["The Lost Realm","The Wastes of Eriador","Escape from Mount Gram"]},
+    {title:"The Ring-maker — cyklus (nové karty)", packs:["The Voice of Isengard","The Dunland Trap","The Three Trials","Trouble in Tharbad","The Nîn-in-Eilph","Celebrimbor's Secret","The Antlered Crown"]},
+    {title:"Trpaslíci — extra karty (Hobbit Saga)", packs:["The Hobbit: Over Hill and Under Hill","The Hobbit: On the Doorstep"], singlesOnly:true}
   ];
+  const SINGLES_ONLY_PACKS = new Set(["the hobbit: over hill and under hill","the hobbit: on the doorstep"]);
   const byPack={};
   for(const code in CARDS.byCode){
     const c=CARDS.byCode[code];
@@ -1232,10 +1300,11 @@ function renderAnalysis(){
   for(const cyc of cycles){
     let inner="";
     for(const pack of cyc.packs){
-      const list=(byPack[norm(pack)]||[]).slice().sort((a,b)=>
+      let list=(byPack[norm(pack)]||[]).slice().sort((a,b)=>
         (to[a.type_code]-to[b.type_code]) ||
         (a.sphere_code||"").localeCompare(b.sphere_code||"") ||
         ((a.position||0)-(b.position||0)));
+      if(SINGLES_ONLY_PACKS.has(norm(pack))) list=list.filter(c=>OWNED_SINGLES_NORM.has(norm(c.name)));
       if(!list.length) continue;
       const noted=list.filter(getAnalysis).length;
       inner+=`<details class="aset"><summary>${esc(pack)}<span class="cnt">${list.length} kariet${noted?` · ${noted} ★`:""}</span></summary>
@@ -1246,7 +1315,7 @@ function renderAnalysis(){
       }
       inner+=`</div></details>`;
     }
-    if(inner) html+=`<div class="acyc"><h3>${esc(cyc.title)}</h3>${inner}</div>`;
+    if(inner) html+=`<div class="acyc"><h3>${esc(cyc.title)}</h3>${cyc.singlesOnly?`<div class="guide-intro" style="text-align:left;margin:2px 0 10px">Z týchto dvoch malých Hobbit Saga balíčkov vlastníš len konkrétne karty (nie celé krabice) — zobrazujú sa preto iba tie, ktoré fyzicky máš.</div>`:""}${inner}</div>`;
   }
   html+=`</section>`;
   view.innerHTML=html; window.scrollTo(0,0);
