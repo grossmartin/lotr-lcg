@@ -208,6 +208,21 @@ img{display:block}
   letter-spacing:.03em;flex:0 0 auto;transition:background .12s}
 .backbtn:hover{background:rgba(201,162,74,.14)}
 .crumbtrail{color:var(--parch-dim);font-size:13.5px}
+
+/* ---------- Quick rules ---------- */
+.qr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin:6px 0 4px}
+.qr-fact{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:linear-gradient(180deg,var(--ink-2),var(--ink))}
+.qr-fact b{display:block;font-family:"Cinzel",serif;color:var(--gold-bright);font-size:22px;line-height:1.1;margin-bottom:3px}
+.qr-fact span{font-size:13.5px;color:var(--parch)}
+.sph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:6px 0}
+.sph-card{border:1px solid var(--line);border-left:4px solid var(--sc,var(--gold));border-radius:10px;padding:11px 14px;background:linear-gradient(180deg,var(--ink-2),var(--ink))}
+.sph-card b{font-family:"Cinzel",serif;color:var(--sc,var(--gold-bright));font-size:15px}
+.sph-card p{margin:4px 0 0;font-size:14px;color:var(--parch);line-height:1.5}
+.phase-mini{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.phase-mini span{background:var(--ink-3);border:1px solid var(--line);border-radius:20px;padding:5px 13px;font-size:13.5px;color:var(--parch)}
+.phase-mini span b{color:var(--gold-bright);margin-right:4px}
+.kwgroup{margin:14px 0 4px}
+.kwgroup h4{font-family:"Cinzel",serif;color:var(--gold-bright);font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin:0 0 6px;opacity:.85}
 .mstats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .mtraits{color:var(--parch-dim);font-style:italic;font-size:14px;margin-bottom:12px}
 .manalysis{border-top:1px solid var(--line);padding-top:12px}
@@ -395,6 +410,7 @@ footer{text-align:center;color:var(--parch-dim);font-size:12.5px;padding:30px 20
     <button class="btn big ghost" onclick="go('phases')">⏱ Fázy kola</button>
     <button class="btn big ghost" onclick="go('guide')">🛠 Ako stavať decky</button>
     <button class="btn big ghost" onclick="go('analysis')">🔍 Analýza kariet</button>
+    <button class="btn big ghost" onclick="go('quickrules')">📜 Rýchle pravidlá</button>
     <label class="toggle"><input type="checkbox" id="onlyOwned" checked> Skryť decky s kartami mimo mojej zbierky</label>
   </div>
   <div class="status" id="status"></div>
@@ -1354,6 +1370,113 @@ function openCard(code){
 }
 function closeCard(){ const m=document.getElementById("cardmodal"); if(m){ m.classList.remove("open"); document.body.style.overflow=""; } }
 
+function renderQuickRules(){
+  setCrumbs(`<a onclick="go('home')">Domov</a> › Rýchle pravidlá`);
+
+  const FACTS = [
+    ["50+","Minimálny počet kariet v decku (hráčske karty, bez hrdinov)"],
+    ["3×","Max. počet kópií rovnomennej karty v decku"],
+    ["1–3","Počet hrdinov na hráča (bez kontraktov)"],
+    ["6","Úvodná ruka na začiatku hry — možný 1× mulligan (vezmi 6 nových, tie si už musíš nechať)"],
+    ["+1","Zdroj na každého hrdinu na začiatku každého kola (fáza zdrojov)"],
+    ["1","Karta, ktorú dobereš na začiatku každého kola (fáza zdrojov)"],
+    ["1","Karta stretnutia na hráča vo fáze úlohy (krok Odhalenie) — Nápor pridáva ďalšie"],
+    ["1","Karta tieňa pre každého nepriateľa zapojeného v strete (fáza boja)"],
+    ["50","Hodnota ohrozenia, pri ktorej je hráč vyradený zo hry"],
+    ["40+","Ohrozenie, od ktorého sa aktivujú efekty Udatnosti (Valour)"],
+    ["≤20","Ohrozenie, pri ktorom fungujú zľavy Utajenia (Secrecy)"]
+  ];
+
+  const SPHERES = [
+    ["--leadership","Velení (Leadership)","Charizma a vplyv — velenie spojencom, zdroje, podpora tímu."],
+    ["--lore","Vědění (Lore)","Múdrosť a skúsenosti — dobieranie kariet, liečenie, scrying."],
+    ["--spirit","Duch (Spirit)","Sila vôle — questovanie, threat control, odolnosť voči zradám."],
+    ["--tactics","Taktika (Tactics)","Bojové schopnosti — útok, obrana, zbrane a brnenie."]
+  ];
+
+  const PHASES = ["1. Zdroje","2. Plánovanie","3. Úloha","4. Putovanie","5. Stretnutie","6. Boj","7. Obnovenie"];
+
+  const CORE_KW = [
+    ["Zatratenie X / Doomed X","Pri odhalení karty s týmto slovom si každý hráč zvýši ohrozenie o X.","Základná krabica"],
+    ["Hlídaný / Guarded","Pri odhalení cieľa s týmto slovom sa odhalí a pripojí ďalšia karta stretnutia — cieľ nejde získať, kým sa jej nezbavíš.","Základná krabica"],
+    ["Střelec / Ranged","Postava môže útočiť na nepriateľa zapojeného v strete s iným hráčom.","Základná krabica"],
+    ["Omezení / Restricted","Postava môže mať najviac 2 doplnky s týmto slovom.","Základná krabica"],
+    ["Stráž / Sentinel","Postava môže brániť útok mierený na iného hráča.","Základná krabica"],
+    ["Nápor / Surge","Odhal z balíčka stretnutia ešte 1 kartu navyše.","Základná krabica"],
+    ["X vítězných bodů / Victory X","Keď karta s týmto slovom opustí hru, ide do zóny „Víťazné body“ (počíta sa pri bodovaní).","Základná krabica"]
+  ];
+
+  const CYCLE_KW = [
+    { cyc:"Khazad-dûm & Dwarrowdelf cyklus", items:[
+      ["Utajení X / Secrecy X","Karta je o X lacnejšia, ak hráš pri ohrození 20 alebo menej. Platí len pri hraní z ruky.","The Redhorn Gate"],
+      ["Přepadení / Ambush","Keď nepriateľ s týmto slovom vstúpi do hry, ihneď sa vykoná skúška stretnutia len proti nemu.","Road to Rivendell"],
+      ["Nezničitelný / Indestructible","Nepriateľa nemožno zničiť poškodením, aj keby malo dosiahnuť jeho HP.","Shadow and Flame"],
+      ["Regenerace X / Regenerate X","Nepriateľ si na začiatku fázy obnovenia vylieči X poškodenia.","The Watcher in the Water"]
+    ]},
+    { cyc:"Heirs of Númenor & Against the Shadow cyklus", items:[
+      ["Lukostřelba X / Archery X","Na začiatku fázy boja sa rozdelí X poškodenia medzi postavy hráčov (podľa vlastnej voľby).","Heirs of Númenor"],
+      ["Bitva / Battle questing","Na queste sa namiesto vôle počíta celkový ÚTOK vyslaných postáv.","Heirs of Númenor"],
+      ["Obležení / Siege questing","Na queste sa namiesto vôle počíta celková OBRANA vyslaných postáv.","Heirs of Númenor"],
+      ["Udatnost / Valour","Efekty s týmto slovom sa aktivujú, keď je ohrozenie hráča 40 alebo viac.","Heirs of Númenor"],
+      ["Podsvětí X / Underworld X","Lokácia dostane X skrytých kariet z „Underworld“ balíčka pod seba; odhalia sa, až keď lokácia opustí hru.","The Steward's Fear"]
+    ]},
+    { cyc:"The Ring-maker cyklus", items:[
+      ["Bránění / Hinder","Namiesto útoku donúti hráčov odobrať postup z questu/aktívnej lokácie.","The Voice of Isengard"],
+      ["Čas X / Time X","Na kartu sa položí X žetónov času; každé kolo sa 1 odoberie. Pri poslednom sa vyhodnotí efekt.","The Voice of Isengard"],
+      ["Hledání X / Searches X","Keď lokácia s týmto slovom opustí hru, odhalia sa vrchné X kariet z „out-of-play“ balíčka.","The Voice of Isengard"],
+      ["Prohledání / Scour","Reminder slovo — keď ho karta spomenie, vyhodnoť efekt, čo za ním nasleduje.","Celebrimbor's Secret"]
+    ]},
+    { cyc:"Angmar Awakened cyklus", items:[
+      ["Zajetí X / Capture X","Pri vstupe karty do hry si každý hráč vezme vrchných X kariet zo svojho „captured“ balíčka a dá ich lícom dolu pod túto kartu.","Escape from Mount Gram"],
+      ["Zajaté karty / Rescuing","Karty zajaté pod inou kartou sú mimo hry. Keď tá karta opustí hru, zajaté karty sa vrátia majiteľovi (hrdina rovno do hry).","Escape from Mount Gram"]
+    ]},
+    { cyc:"Sága (Pán prsteňov)", items:[
+      ["Nebezpečí / Peril","Hráč, ktorý odhalí túto kartu, ju musí vyriešiť sám — ostatní hráči nemôžu reagovať ani konať.","The Black Riders"],
+      ["Trvalé / Permanent","Výhoda/strasť s týmto slovom sa natrvalo pripojí k jednému hrdinovi na celú kampaň (zapíše sa do záznamu kampane).","The Black Riders"],
+      ["Přízračný / Phantom","Namiesto poškodenia sa brániacemu hráčovi o rovnakú hodnotu zvýši ohrozenie.","The Flame of the West"]
+    ]}
+  ];
+
+  let html=`<section class="section" style="margin-top:10px">
+    <div class="head scenario"><h2>Rýchle pravidlá</h2><span class="meta">Cheat-sheet · základné čísla a kľúčové slová naprieč tvojím poolom</span></div>
+    <div class="guide">
+    <div class="guide-intro">Rýchla pamäťová pomôcka pre hráča, čo sa vracia po dlhšej pauze. Podrobný priebeh kola nájdeš v „⏱ Fázy kola“.</div>
+
+    <details class="gsec" open><summary><span class="gnum">1</span>Základné čísla</summary><div class="gbody">
+      <div class="qr-grid">${FACTS.map(f=>`<div class="qr-fact"><b>${f[0]}</b><span>${f[1]}</span></div>`).join("")}</div>
+    </div></details>
+
+    <details class="gsec"><summary><span class="gnum">2</span>Sféry vplyvu</summary><div class="gbody">
+      <div class="sph-grid">${SPHERES.map(s=>`<div class="sph-card" style="--sc:var(${s[0]})"><b>${s[1]}</b><p>${s[2]}</p></div>`).join("")}</div>
+      <p style="margin-top:10px">Za kartu môžeš platiť len zdrojmi hrdinu, ktorý má rovnakú sféru ako karta (neutrálne karty platí ľubovoľný hrdina).</p>
+    </div></details>
+
+    <details class="gsec"><summary><span class="gnum">3</span>Priebeh kola (skrátene)</summary><div class="gbody">
+      <div class="phase-mini">${PHASES.map(p=>`<span>${esc(p)}</span>`).join("")}</div>
+      <p>Podrobný rozpis krokov a keď sa čo smie hrať nájdeš na stránke <a onclick="go('phases')" style="cursor:pointer">⏱ Fázy kola</a>.</p>
+    </div></details>
+
+    <details class="gsec" open><summary><span class="gnum">4</span>Kľúčové slová — Základná krabica</summary><div class="gbody">
+      ${CORE_KW.map(k=>`<div class="kw"><b>${esc(k[0])}</b> — <span>${esc(k[1])} <i style="color:var(--parch-dim);font-style:italic">(${esc(k[2])})</i></span></div>`).join("")}
+    </div></details>
+
+    <details class="gsec"><summary><span class="gnum">5</span>Kľúčové slová — ďalšie cykly v tvojom poole</summary><div class="gbody">
+      ${CYCLE_KW.map(g=>`<div class="kwgroup"><h4>${esc(g.cyc)}</h4>${g.items.map(k=>`<div class="kw"><b>${esc(k[0])}</b> — <span>${esc(k[1])} <i style="color:var(--parch-dim);font-style:italic">(${esc(k[2])})</i></span></div>`).join("")}</div>`).join("")}
+    </div></details>
+
+    <details class="gsec"><summary><span class="gnum">6</span>Ďalšie dôležité pojmy</summary><div class="gbody">
+      <div class="kw"><b>Aktívna lokácia</b> — <span>lokácia, do ktorej hráči „putovali“ (fáza putovania); jej hrozba sa už nepočíta do staging area, ale progres sa dáva na ňu, nie na quest.</span></div>
+      <div class="kw"><b>Oblasť odhalenia (staging area)</b> — <span>miesto, kam sa dávajú odhalení nepriatelia, lokácie a ciele, kým sa s nimi niečo nespraví.</span></div>
+      <div class="kw"><b>Pripravený / Vyčerpaný</b> — <span>vyčerpaná karta (otočená nabok) sa nedá použiť na akciu vyžadujúcu vyčerpanie, kým sa v fáze obnovenia nepripraví.</span></div>
+      <div class="kw"><b>Jedinečná karta (unikát)</b> — <span>označená symbolom ●; nesmieš mať v hre 2 kópie tej istej jedinečnej karty naraz.</span></div>
+      <div class="kw"><b>Neutrálna karta</b> — <span>nepatrí do žiadnej sféry; platí sa akýmikoľvek zdrojmi, ale platiaci hrdina musí byť v hre.</span></div>
+      <div class="kw"><b>Výhody / Strasti (Boons / Burdens)</b> — <span>špeciálne kampaňové karty (Trvalé efekty), ktoré prenášaš medzi scenármi v rámci jednej kampane.</span></div>
+    </div></details>
+
+    </div></section>`;
+  view.innerHTML=html; window.scrollTo(0,0);
+}
+
 function renderGuide(){
   setCrumbs(`<a onclick="go('home')">Domov</a> › Ako stavať decky`);
   const html=`<section class="section" style="margin-top:10px">
@@ -1565,6 +1688,7 @@ function go(v,a,b){
   else if(v==="phases") location.hash="#phases";
   else if(v==="guide") location.hash="#guide";
   else if(v==="analysis") location.hash="#analysis";
+  else if(v==="quickrules") location.hash="#quickrules";
 }
 let prevHash = location.hash;
 const scrollPos = {};
@@ -1576,6 +1700,7 @@ function renderRoute(){
   else if(h==="phases"){ CURRENT={view:"phases"}; renderPhases(); }
   else if(h==="guide"){ CURRENT={view:"guide"}; renderGuide(); }
   else if(h==="analysis"){ CURRENT={view:"analysis"}; renderAnalysis(); }
+  else if(h==="quickrules"){ CURRENT={view:"quickrules"}; renderQuickRules(); }
   else { CURRENT={view:"home"}; renderHome(); }
   const y = scrollPos[location.hash] || 0;
   window.scrollTo(0, y);
