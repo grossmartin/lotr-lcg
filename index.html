@@ -194,11 +194,11 @@ img{display:block}
 .modal{position:fixed;inset:0;background:rgba(4,5,8,.84);z-index:100;display:none;align-items:center;justify-content:center;padding:18px}
 .modal.open{display:flex}
 .modal-inner{background:linear-gradient(180deg,var(--ink-2),var(--ink));border:1px solid var(--gold);border-radius:14px;
-  max-width:720px;width:100%;max-height:92vh;overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.65)}
+  max-width:920px;width:100%;max-height:94vh;overflow:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.65)}
 .modal-x{position:absolute;top:10px;right:10px;background:var(--ink-3);border:1px solid var(--line);color:var(--parch);
   width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:15px;z-index:2}
 .modal-x:hover{border-color:var(--gold);color:var(--gold-bright)}
-.modal-grid{display:grid;grid-template-columns:220px 1fr;gap:20px;padding:22px}
+.modal-grid{display:grid;grid-template-columns:360px 1fr;gap:24px;padding:24px}
 .modal-img{width:100%;border-radius:10px;border:1px solid var(--line)}
 .modal-info h3{font-family:"Cinzel",serif;color:var(--gold-bright);font-size:22px;margin:0 0 4px;line-height:1.2}
 .czname{color:#8fb4e6;font-size:15px;font-style:italic;margin:0 0 10px}
@@ -232,7 +232,7 @@ img{display:block}
 
 @media (max-width:640px){
   .modal-grid{grid-template-columns:1fr}
-  .modal-img{max-width:190px;margin:0 auto}
+  .modal-img{max-width:280px;margin:0 auto}
   .agrid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px}
 }
 @media (max-width:640px){
@@ -284,7 +284,11 @@ img{display:block}
 .hero-port img{width:100%;height:135%;object-fit:cover;object-position:center 8%}
 .deck .body{padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
 .deck .name{font-family:"Cinzel",serif;font-weight:600;font-size:18px;color:var(--parch);line-height:1.35}
-.deck .by{font-size:13px;color:var(--parch-dim);font-style:italic;margin-top:-4px}
+.deck .by{margin-top:-2px}
+.authortag{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;padding:2px 9px;border-radius:999px;
+  border:1px solid var(--line);color:var(--parch-dim);font-family:"Cinzel",serif;letter-spacing:.03em;
+  background:rgba(255,255,255,.02)}
+.authortag.legend{border-color:var(--gold);color:var(--gold-bright);background:rgba(201,162,74,.10)}
 .deck .stats{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:auto}
 .pill{font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--parch-dim);white-space:nowrap}
 .pill.threat{border-color:rgba(201,162,74,.5);color:var(--gold-bright)}
@@ -320,7 +324,7 @@ img{display:block}
   border-bottom:1px solid var(--line);padding-bottom:6px;margin:0 0 16px;display:flex;justify-content:space-between}
 .cardgroup h3 .g-cnt{color:var(--parch-dim);font-family:"EB Garamond",serif;font-style:italic;font-size:14px}
 .cardgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:16px}
-.card{position:relative}
+.card{position:relative;cursor:pointer}
 .card .imgwrap{position:relative;border-radius:9px;overflow:hidden;border:1px solid var(--line);background:var(--ink-3);aspect-ratio:.717}
 .card .imgwrap img{width:100%;height:100%;object-fit:cover}
 .card.notowned .imgwrap{outline:2px solid var(--ember);outline-offset:-2px}
@@ -579,15 +583,21 @@ const DATA = { groups: [
     { id:"doomed",  name:"Doomed",        cz:"Zatratenie — threat za silu (Ring-maker)", deckIds:[40466], moreIds:[13957] }
   ]},
 
-  { id:"seastan", title:"Seastan Legend", subtitle:"Legendárne decky od tvorcu RingsDB · overené v tvojom poole", kind:"themes", items:[
-    { id:"seastan_boromir", name:"Boromir · Galadriel · Glorfindel", cz:"„Seastan's Boromir“ — the One Deck to Rule Them All", deckIds:[42],
+  { id:"legendary", title:"Legendary Decks", subtitle:"Slávne decky komunitných legiend · overené v tvojom poole", kind:"themes", items:[
+    { id:"seastan_boromir", name:"Boromir · Galadriel · Glorfindel", cz:"„Seastan's Boromir“ — the One Deck to Rule Them All", deckIds:[42], author:"Seastan",
       note:"Najobľúbenejší deck na RingsDB (575 ♥). Porazil kompletne celú hru až po koniec Angmar Awakened aj Nightmare mód. Steward of Gondor + A Good Harvest na Boromira → Gondorian Fire + Blood of Númenor = zabije takmer čokoľvek." },
-    { id:"seastan_gloin", name:"DúneGlóin — nezničiteľný Glóin", cz:"Glóin + Warden of Healing + Elrond = nekonečné liečenie", deckIds:[1107],
+    { id:"seastan_gloin", name:"DúneGlóin — nezničiteľný Glóin", cz:"Glóin + Warden of Healing + Elrond = nekonečné liečenie", deckIds:[1107], author:"Seastan",
       note:"Slávny combo deck: Glóin berie útoky neobránený, každé 2 poškodenie mu dajú 2 zdroje, ktorými sa vďaka Elrondovi vyliečí cez Wardena. Prakticky nezničiteľný proti čomukoľvek so silou útoku 7 alebo menej." },
-    { id:"seastan_core", name:"Core + Mirkwood Solo", cz:"Théodred · Éowyn · Beravor — pre Základnú krabicu a Shadows of Mirkwood", deckIds:[63245], moreIds:[961],
+    { id:"seastan_core", name:"Core + Mirkwood Solo", cz:"Théodred · Éowyn · Beravor — pre Základnú krabicu a Shadows of Mirkwood", deckIds:[63245], moreIds:[961], author:"Seastan",
       note:"Seastanov odporúčaný deck na prejdenie Core Setu a celého Mirkwood cyklu. Steward of Gondor na Éowyn, Beravor ťahá karty každé kolo." },
-    { id:"seastan_cairandros", name:"Gimli · Beravor · Beregond", cz:"„Minimum Purchase — The Siege of Cair Andros“", deckIds:[5593],
-      note:"Zámerne obmedzený na Core + Heirs of Númenor. Beregond bráni, Gimli zabíja (a rastie z poškodenia), Beravor ťahá karty. Ukazuje, že aj úzky pool vie poraziť ťažký scenár." }
+    { id:"seastan_cairandros", name:"Gimli · Beravor · Beregond", cz:"„Minimum Purchase — The Siege of Cair Andros“", deckIds:[5593], author:"Seastan",
+      note:"Zámerne obmedzený na Core + Heirs of Númenor. Beregond bráni, Gimli zabíja (a rastie z poškodenia), Beravor ťahá karty. Ukazuje, že aj úzky pool vie poraziť ťažký scenár." },
+    { id:"mormegil_core", name:"Théodred · Éowyn · Beravor", cz:"„My Best Revised Core Deck“ — CSO Solo", deckIds:[47454], author:"Mormegil",
+      note:"Od tvorcu rozsiahleho „Mormegil's Deckbox“ katalógu archetypov. Zámerne len zo Základnej krabice — nízke ohrozenie, Steward of Gondor na Éowyn, Beravor ťahá karty, Northern Tracker rieši lokácie, A Test of Will zradné karty." },
+    { id:"dalestephenson_outlands", name:"Hirluin · Denethor · Prince Imrahil", cz:"„A Stereotypical Outlands Deck“", deckIds:[9192], author:"dalestephenson",
+      note:"Nie kreatívny, ale poctivý — autor spriemeroval 8 publikovaných Outlands deckov (podľa počtu kariet v každej kategórii) do jedného „priemerného“ zástupcu archetypu. Steward of Gondor na Hirluina, zdroje od Denethora, Outlands allies čo najrýchlejšie." },
+    { id:"dalestephenson_silvan", name:"Celeborn · Haldir · Galadriel", cz:"„A Stereotypical Silvan Deck“", deckIds:[9199], author:"dalestephenson",
+      note:"Rovnaká metóda ako pri Outlands — spriemerovaných 29 Silvan deckov s touto zostavou hrdinov do jedného reprezentatívneho decku." }
   ]}
 
 ]};
@@ -718,6 +728,10 @@ function findItem(groupId,itemId){  const g=DATA.groups.find(x=>x.id===groupId);
 function isCuratedId(id){ id=+id;
   return DATA.groups.some(g=>g.items.some(it=>(it.deckIds||[]).includes(id)));
 }
+function isLegendaryId(id){ id=+id;
+  const g=DATA.groups.find(x=>x.id==="legendary"); if(!g) return false;
+  return g.items.some(it=>(it.deckIds||[]).includes(id)||(it.moreIds||[]).includes(id));
+}
 
 /* ================================================================== *
  *  RENDER
@@ -816,7 +830,7 @@ async function renderList(groupId,itemId){
       el.appendChild(rm);
     }
     wrap.appendChild(el);
-    hydrateDeckCard(d.id,el,d.star);
+    hydrateDeckCard(d.id,el,d.star,groupId==="legendary");
   });
 
   $("#addBtn").onclick=()=>{
@@ -828,7 +842,7 @@ async function renderList(groupId,itemId){
   applyOwnedFilter();
 }
 
-async function hydrateDeckCard(id,el,star){
+async function hydrateDeckCard(id,el,star,legend){
   try{
     const d=await loadDeck(id);
     const okBadge = d.valid50
@@ -843,7 +857,7 @@ async function hydrateDeckCard(id,el,star){
       <div class="heroes">${heroPortraits(d.heroes)}</div>
       <div class="body">
         <div class="name">${esc(d.name)}</div>
-        ${d.author?`<div class="by">od ${esc(d.author)}</div>`:""}
+        ${d.author?`<div class="by"><span class="authortag${legend?" legend":""}">✒ ${esc(d.author)}</span></div>`:""}
         <div class="stats">
           <span class="pill threat">Threat <b>${d.threat}</b></span>
           <span class="pill">${d.playerCount} kariet</span>
@@ -876,7 +890,8 @@ async function renderDeck(id){
         :`<span class="pill warn">⚠ obsahuje karty mimo zbierky</span>`)
     : `<span class="pill warn">⚠ len ${d.playerCount} kariet — nespĺňa pravidlo 50</span>`;
 
-  let groupsHtml="";
+  let groupsHtml=`<div class="cardgroup"><h3>Hrdinovia<span class="g-cnt">${d.heroes.length} ks</span></h3>
+    <div class="cardgrid">${d.heroes.map(heroTile).join("")}</div></div>`;
   for(const t of TYPE_ORDER){
     if(t==="hero") continue;
     const arr=d.byType[t]; if(!arr||!arr.length) continue;
@@ -901,13 +916,12 @@ async function renderDeck(id){
   view.innerHTML=`
     <section class="section" style="margin-top:16px">
       <div class="detail-head">
-        <div class="heroes">${heroPortraits(d.heroes)}</div>
         <div class="detail-title">
           <h2>${esc(d.name)}${isCuratedId(id)?'<span class="star" title="Odporúčaný, overený výber">★</span>':''}</h2>
-          ${d.author?`<div class="by">od ${esc(d.author)}${d.lastPack?` · pool do: ${esc(d.lastPack)}`:""}</div>`:""}
+          ${d.author?`<div class="by"><span class="authortag${isLegendaryId(id)?" legend":""}">✒ ${esc(d.author)}</span>${d.lastPack?` <span class="pill">pool do: ${esc(d.lastPack)}</span>`:""}</div>`:""}
           <div class="detail-stats">
             <span class="pill threat big-threat">Počiatočné ohrozenie · <b>${d.threat}</b></span>
-            <span class="pill">${d.heroes.length} hrdinovia</span>
+            <span class="pill">${d.heroes.map(h=>esc(h.card.name)).join(" · ")}</span>
             <span class="pill">${d.playerCount} kariet v decku</span>
             ${buildBadge}
           </div>
@@ -925,13 +939,23 @@ async function renderDeck(id){
 }
 function cardTile(x){
   const owned=isOwnedCard(x.card);
-  return `<div class="card ${owned?"":"notowned"}">
+  return `<div class="card ${owned?"":"notowned"}" onclick="openCard('${x.card.code}')">
     <span class="qty">${x.qty}×</span>
     <div class="imgwrap">
       <img loading="lazy" src="${cardImg(x.card)}" alt="${esc(x.card.name)}" onerror="this.parentNode.classList.add('noimg')">
       ${owned?"":`<span class="flag">mimo zbierky</span>`}
     </div>
     <div class="cname"><b class="cn-qty">${x.qty}×</b> ${esc(x.card.name)}</div>
+  </div>`;
+}
+function heroTile(h){
+  const owned=isOwnedCard(h.card);
+  return `<div class="card ${owned?"":"notowned"}" onclick="openCard('${h.card.code}')">
+    <div class="imgwrap">
+      <img loading="lazy" src="${cardImg(h.card)}" alt="${esc(h.card.name)}" onerror="this.parentNode.classList.add('noimg')">
+      ${owned?"":`<span class="flag">mimo zbierky</span>`}
+    </div>
+    <div class="cname">${esc(h.card.name)}</div>
   </div>`;
 }
 /* lightweight, safe markdown-ish renderer for RingsDB descriptions */
